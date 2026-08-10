@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PatternIQ Wireframes, Step 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1E3D4C; --navy-deep:#142A36; --navy-tint:#EDF1F3;
+  --gold:#B8924A; --gold-strong:#8E6D2B; --terra:#C2734D; --terra-dark:#A0522D;
+  --white:#FFFFFF; --off:#FAFAF9; --slate:#5A6B75; --line:#D8DFE3;
+  --ok:#1E3D4C; --warn:#A0522D; --mute:#63727B;
+  --rest-shadow:0 1px 3px rgba(0,0,0,.08);
+  --hover-shadow:0 8px 16px rgba(0,0,0,.10);
+  --mono:"SFMono-Regular",ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--off); color:var(--navy);
+  font-family:"Plus Jakarta Sans",system-ui,sans-serif;
+  font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased;
+}
+.skip{position:absolute;left:-9999px;top:0;background:var(--navy);color:#fff;padding:10px 16px;z-index:999}
+.skip:focus{left:8px;top:8px}
+a{color:var(--navy);text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--gold-strong);outline-offset:2px;border-radius:2px}
+button{font-family:inherit;font-size:inherit}
+
+/* Placeholder banner */
+.banner{
+  background:var(--navy);color:#fff;padding:10px 20px;
+  font-family:"DM Sans",system-ui,sans-serif;font-size:13px;letter-spacing:.02em;
+}
+.banner strong{color:#F2D89B;font-weight:700}
+
+/* Shell */
+.shell{display:grid;grid-template-columns:216px 1fr;min-height:100vh}
+@media (max-width:900px){.shell{grid-template-columns:1fr}}
+nav.side{
+  background:var(--white);border-right:1px solid var(--line);padding:20px 0;
+}
+.brand{padding:0 18px 16px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.brand .eyebrow{
+  font-family:"DM Sans",sans-serif;font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--terra-dark);font-weight:700;margin:0 0 2px
+}
+.brand h1{font-size:19px;font-weight:800;margin:0;letter-spacing:-.01em}
+nav.side ul{list-style:none;margin:0;padding:0}
+nav.side button{
+  display:block;width:100%;text-align:left;background:none;border:0;
+  padding:8px 18px;color:var(--navy);cursor:pointer;font-size:14px;
+  border-left:3px solid transparent
+}
+nav.side button:hover{background:var(--navy-tint)}
+nav.side button[aria-current="page"]{
+  border-left-color:var(--gold-strong);background:var(--navy-tint);font-weight:700
+}
+nav.side .group{
+  font-family:"DM Sans",sans-serif;font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--mute);padding:14px 18px 4px;font-weight:700
+}
+main{padding:26px 30px 70px;max-width:1240px}
+
+/* Typography */
+.eyebrow{
+  font-family:"DM Sans",sans-serif;font-size:12px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--terra-dark);font-weight:700;margin:0 0 4px
+}
+h2{font-size:26px;font-weight:800;margin:0 0 4px;letter-spacing:-.015em}
+h3{font-size:17px;font-weight:600;color:var(--terra-dark);margin:26px 0 10px}
+h4{font-size:14px;font-weight:700;margin:0 0 8px}
+.sub{color:var(--slate);margin:0 0 22px;font-size:14px;max-width:70ch}
+.note{font-size:13px;color:var(--slate)}
+
+/* Cards */
+.card{
+  background:var(--white);border:1px solid var(--line);border-radius:4px;
+  padding:18px;box-shadow:var(--rest-shadow);
+  transition:transform 200ms ease, box-shadow 200ms ease;
+}
+.card.lift:hover{transform:translateY(-2px);box-shadow:var(--hover-shadow)}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g-2-1{grid-template-columns:2fr 1fr}
+@media (max-width:1000px){.g3,.g4,.g-2-1,.g2{grid-template-columns:1fr}}
+
+/* Numbers */
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+.big{font-size:40px;font-weight:800;line-height:1;letter-spacing:-.02em}
+.mid{font-size:24px;font-weight:700;line-height:1.1}
+.lab{font-family:"DM Sans",sans-serif;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--mute);font-weight:700}
+
+/* Confidence meter */
+.meter{display:flex;gap:3px;margin:6px 0 4px}
+.meter span{height:8px;flex:1;background:var(--navy-tint);border:1px solid var(--line);border-radius:1px}
+.meter span.on{background:var(--navy);border-color:var(--navy)}
+.meter span.on.gold{background:var(--gold);border-color:var(--gold)}
+
+/* Tags */
+.tag{
+  display:inline-flex;align-items:center;gap:5px;font-family:"DM Sans",sans-serif;
+  font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;
+  padding:3px 7px;border-radius:2px;border:1px solid var(--line);color:var(--slate);
+  background:var(--white);white-space:nowrap
+}
+.tag.fact{border-color:var(--navy);color:var(--navy)}
+.tag.inference{border-color:var(--slate);color:var(--slate);border-style:dashed}
+.tag.pattern{border-color:var(--terra);color:var(--terra-dark)}
+.tag.prediction{border-color:var(--gold);color:var(--terra-dark);border-style:dotted}
+.tag.unval{background:#FBF4E6;border-color:var(--gold);color:var(--terra-dark)}
+.tag.withheld{background:var(--navy-tint);border-color:var(--slate);color:var(--slate)}
+.tag.lic{border-color:var(--terra-dark);color:var(--terra-dark)}
+
+/* Tables */
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+caption{text-align:left;font-size:13px;color:var(--slate);padding:0 0 8px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+thead th{
+  background:var(--navy-tint);font-family:"DM Sans",sans-serif;font-size:11px;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--navy);font-weight:700;
+  position:sticky;top:0;border-bottom:1px solid var(--navy)
+}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+tbody tr:hover{background:var(--off)}
+.tblwrap{overflow:auto;max-height:460px;border:1px solid var(--line);border-radius:4px;background:var(--white)}
+
+/* Provenance / explain affordance */
+.prov{
+  border:0;background:none;color:var(--slate);cursor:pointer;padding:0 2px;
+  font-size:11px;border-bottom:1px dotted var(--slate)
+}
+.prov:hover{color:var(--navy);border-bottom-color:var(--navy)}
+
+/* Diverging bars */
+.dbar{display:grid;grid-template-columns:150px 1fr 62px;gap:10px;align-items:center;margin:5px 0;font-size:13px}
+.dtrack{position:relative;height:16px;background:var(--navy-tint);border:1px solid var(--line);border-radius:2px}
+.dmid{position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--slate)}
+.dfill{position:absolute;top:1px;bottom:1px;background:var(--navy)}
+.dfill.neg{background:var(--terra)}
+.dbar .n{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+
+/* Chart placeholder */
+.chart{
+  background:var(--white);border:1px solid var(--line);border-radius:3px;height:230px;
+  position:relative;overflow:hidden
+}
+.chart svg{display:block;width:100%;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.legend button{
+  border:1px solid var(--line);background:var(--white);border-radius:2px;padding:4px 9px;
+  font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px
+}
+.legend button[aria-pressed="true"]{border-color:var(--navy);font-weight:600}
+.swatch{width:10px;height:10px;border-radius:1px;display:inline-block}
+
+/* Pills / periods */
+.pills{display:flex;gap:4px;flex-wrap:wrap}
+.pills button{
+  border:1px solid var(--line);background:var(--white);padding:4px 10px;font-size:12.5px;
+  cursor:pointer;border-radius:2px
+}
+.pills button[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+/* Callouts */
+.callout{
+  border:1px solid var(--line);border-left:3px solid var(--terra-dark);
+  background:var(--white);padding:12px 14px;border-radius:3px;font-size:13.5px
+}
+.callout.gold{border-left-color:var(--gold)}
+.callout.navy{border-left-color:var(--navy)}
+.callout h4{margin-bottom:4px}
+ul.tight{margin:6px 0 0;padding-left:18px}
+ul.tight li{margin:3px 0;font-size:13.5px}
+
+/* Forms */
+.field{margin-bottom:12px}
+.field label{display:block;font-family:"DM Sans",sans-serif;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--slate);font-weight:700;margin-bottom:3px}
+.field input,.field select{
+  width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:3px;
+  font-family:var(--mono);font-size:13.5px;background:var(--white);color:var(--navy)
+}
+.field .hint{font-size:11.5px;color:var(--mute);margin-top:3px}
+fieldset{border:1px solid var(--line);border-radius:3px;padding:14px;margin:0 0 16px}
+legend{font-family:"DM Sans",sans-serif;font-size:11px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:var(--terra-dark);padding:0 6px}
+
+/* Tabs */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.tabs button{
+  border:1px solid transparent;border-bottom:0;background:none;padding:8px 14px;
+  cursor:pointer;font-size:13.5px;color:var(--slate)
+}
+.tabs button[aria-selected="true"]{
+  background:var(--white);border-color:var(--line);color:var(--navy);font-weight:700;
+  border-bottom:2px solid var(--white);margin-bottom:-1px
+}
+.screen[hidden]{display:none}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important;animation:none !important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+
+<div class="banner" role="note">
+  <strong>Wireframe.</strong> Every value on this page is an illustrative placeholder. Nothing here describes a real market, and no live data is connected.
+</div>
+
+<div class="shell">
+<nav class="side" aria-label="Primary">
+  <div class="brand">
+    <p class="eyebrow">Investment Research</p>
+    <h1>PatternIQ</h1>
+  </div>
+  <div class="group">Market</div>
+  <ul>
+    <li><button type="button" data-screen="overview" aria-current="page">Overview</button></li>
+    <li><button type="button" data-screen="discover">Discover</button></li>
+    <li><button type="button" data-screen="market">Market</button></li>
+    <li><button type="button" data-screen="watchlist">Watchlist</button></li>
+    <li><button type="button" data-screen="patterns">Patterns</button></li>
+  </ul>
+  <div class="group">Mine</div>
+  <ul>
+    <li><button type="button" data-screen="deal">Deal Analyzer</button></li>
+    <li><button type="button" data-screen="portfolio">Portfolio</button></li>
+    <li><button type="button" data-screen="analysis">Run Analysis</button></li>
+  </ul>
+  <div class="group">Evidence</div>
+  <ul>
+    <li><button type="button" data-screen="learn">Learn</button></li>
+    <li><button type="button" data-screen="sources">Data and Sources</button></li>
+  </ul>
+</nav>
+
+<main id="main" tabindex="-1">
+<div aria-live="polite" class="sr" id="announce"></div>
+
+<!-- ============ OVERVIEW ============ -->
+<section class="screen" id="overview" aria-labelledby="h-overview">
+  <p class="eyebrow">Overview</p>
+  <h2 id="h-overview">Week of March 9</h2>
+  <p class="sub">What changed, what it means, and how strong the evidence is. Ordered by significance, not by recency.</p>
+
+  <div class="grid g4" style="margin-bottom:18px">
+    <div class="card lift">
+      <p class="lab">Markets scored</p>
+      <p class="big num">1,847</p>
+      <p class="note">of 4,061 evaluated</p>
+    </div>
+    <div class="card lift">
+      <p class="lab">Withheld</p>
+      <p class="big num">2,214</p>
+      <p class="note">failed a publication gate <button class="prov" type="button">why</button></p>
+    </div>
+    <div class="card lift">
+      <p class="lab">Median confidence</p>
+      <p class="big num">64</p>
+      <p class="note">Moderate band</p>
+    </div>
+    <div class="card lift">
+      <p class="lab">Patterns detected</p>
+      <p class="big num">37</p>
+      <p class="note">all unvalidated <span class="tag unval">Not validated</span></p>
+    </div>
+  </div>
+
+  <div class="grid g-2-1">
+    <div class="card">
+      <h4>What changed in your watchlist</h4>
+      <div class="tblwrap" style="max-height:none">
+      <table>
+        <caption class="sr">Watchlist changes this week</caption>
+        <thead><tr>
+          <th scope="col">Market</th><th scope="col" class="n">Opportunity</th>
+          <th scope="col" class="n">Change</th><th scope="col" class="n">Confidence</th>
+          <th scope="col">What moved</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>Placeholder County A</td><td class="n">62.4</td><td class="n">&#9650; +3.1</td><td class="n">71 High</td><td>Price reduction share up, DOM flat</td></tr>
+          <tr><td>Placeholder Metro B</td><td class="n">57.9</td><td class="n">&#9660; &minus;1.8</td><td class="n">68 Moderate</td><td>Pending to active ratio fell</td></tr>
+          <tr><td>Placeholder County C</td><td class="n">n/a</td><td class="n">n/a</td><td class="n">38 Low</td><td><span class="tag withheld">Withheld</span> confidence below 40</td></tr>
+          <tr><td>Placeholder ZCTA D</td><td class="n">49.1</td><td class="n">&#9650; +0.4</td><td class="n">52 Limited</td><td>No material change</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>Information that would improve this</h4>
+      <ul class="tight">
+        <li>Final renovation cost for Project 3, listed 12 days ago</li>
+        <li>Actual holding period for Project 1</li>
+        <li>Confirm your kitchen budget assumption, currently the 2024 default</li>
+      </ul>
+      <p class="note" style="margin-top:10px">Each request states why it is being asked before you answer it.</p>
+    </div>
+  </div>
+
+  <h3>Patterns detected this week</h3>
+  <div class="grid g2">
+    <div class="card lift">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div>
+          <span class="tag pattern">Pattern</span>
+          <h4 style="margin-top:8px">Increasing Buyer Leverage</h4>
+          <p class="note">Placeholder County A &middot; county level</p>
+        </div>
+        <div style="text-align:right">
+          <p class="lab">Strength</p><p class="mid num">75</p>
+        </div>
+      </div>
+      <p style="font-size:13.5px;margin:10px 0 6px">3 of 3 required signals firing for 3 consecutive months. 0 of 2 corroborating signals.</p>
+      <div class="callout gold">
+        <h4>No historical validation yet</h4>
+        <p style="margin:0">This is a described combination of current signals, not a demonstrated predictor. Confidence is capped at 40 until backtesting produces evidence.</p>
+      </div>
+    </div>
+    <div class="card lift">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div>
+          <span class="tag pattern">Pattern</span>
+          <h4 style="margin-top:8px">Exit Liquidity Deterioration</h4>
+          <p class="note">Placeholder Metro B &middot; CBSA level</p>
+        </div>
+        <div style="text-align:right">
+          <p class="lab">Strength</p><p class="mid num">88</p>
+        </div>
+      </div>
+      <p style="font-size:13.5px;margin:10px 0 6px">3 of 3 required and 1 of 2 corroborating signals firing.</p>
+      <div class="callout">
+        <h4>Shown at equal weight to favorable patterns</h4>
+        <p style="margin:0">This market also shows improving acquisition conditions. A warning pattern is never subordinated to a favorable one in the same market.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DISCOVER ============ -->
+<section class="screen" id="discover" hidden aria-labelledby="h-discover">
+  <p class="eyebrow">Discover</p>
+  <h2 id="h-discover">Screen markets</h2>
+  <p class="sub">Ranked within a peer set, never across peer sets. Withheld markets are counted, not hidden.</p>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="grid g4">
+      <div class="field"><label for="f-level">Geography level</label>
+        <select id="f-level"><option>County</option><option>CBSA</option><option>ZCTA</option></select></div>
+      <div class="field"><label for="f-peer">Peer set</label>
+        <select id="f-peer"><option>Top population tertile (n = 1,033)</option><option>Middle tertile</option><option>Bottom tertile</option></select></div>
+      <div class="field"><label for="f-conf">Minimum confidence</label>
+        <select id="f-conf"><option>60 Moderate and above</option><option>40 Limited and above</option><option>Show all including withheld</option></select></div>
+      <div class="field"><label for="f-price">Max median price</label>
+        <input id="f-price" inputmode="decimal" value="450,000"></div>
+    </div>
+    <p class="note">Filters apply to your preference profile. Best market nationally and best market for you are different questions.</p>
+  </div>
+
+  <div class="tblwrap">
+    <table>
+      <caption>Placeholder ranking. Column headers are sortable in the built version.</caption>
+      <thead><tr>
+        <th scope="col">Rank</th><th scope="col">Market</th>
+        <th scope="col" class="n">Opportunity</th><th scope="col" class="n">Confidence</th>
+        <th scope="col" class="n">Acq</th><th scope="col" class="n">Exit</th>
+        <th scope="col" class="n">Econ</th><th scope="col" class="n">Risk</th>
+        <th scope="col">Patterns</th><th scope="col">Trend</th>
+      </tr></thead>
+      <tbody>
+        <tr><td class="n">1</td><td>Placeholder County A</td><td class="n">62.4</td><td class="n">71 High</td><td class="n">78</td><td class="n">44</td><td class="n">66</td><td class="n">51</td><td><span class="tag pattern">1</span></td><td><svg width="70" height="18" aria-hidden="true"><polyline points="0,14 12,12 24,13 36,9 48,7 60,5 70,4" fill="none" stroke="#1E3D4C" stroke-width="1.5"/></svg></td></tr>
+        <tr><td class="n">2</td><td>Placeholder County E</td><td class="n">61.0</td><td class="n">66 Moderate</td><td class="n">71</td><td class="n">58</td><td class="n">59</td><td class="n">55</td><td></td><td><svg width="70" height="18" aria-hidden="true"><polyline points="0,10 12,11 24,9 36,10 48,8 60,7 70,7" fill="none" stroke="#1E3D4C" stroke-width="1.5"/></svg></td></tr>
+        <tr><td class="n">3</td><td>Placeholder Metro B</td><td class="n">57.9</td><td class="n">68 Moderate</td><td class="n">80</td><td class="n">31</td><td class="n">62</td><td class="n">48</td><td><span class="tag pattern">2</span></td><td><svg width="70" height="18" aria-hidden="true"><polyline points="0,6 12,7 24,9 36,8 48,11 60,12 70,13" fill="none" stroke="#C2734D" stroke-width="1.5"/></svg></td></tr>
+        <tr><td class="n">4</td><td>Placeholder County F</td><td class="n">55.2</td><td class="n">74 High</td><td class="n">52</td><td class="n">61</td><td class="n">71</td><td class="n">60</td><td></td><td><svg width="70" height="18" aria-hidden="true"><polyline points="0,11 12,10 24,10 36,9 48,9 60,8 70,8" fill="none" stroke="#1E3D4C" stroke-width="1.5"/></svg></td></tr>
+        <tr style="background:var(--navy-tint)"><td class="n">n/a</td><td>Placeholder County C</td><td class="n"><span class="tag withheld">Withheld</span></td><td class="n">38 Low</td><td class="n">n/a</td><td class="n">n/a</td><td class="n">n/a</td><td class="n">n/a</td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h4>2,214 markets withheld from this ranking</h4>
+    <table>
+      <caption class="sr">Reasons markets were withheld</caption>
+      <thead><tr><th scope="col">Gate</th><th scope="col" class="n">Markets</th><th scope="col">What would change it</th></tr></thead>
+      <tbody>
+        <tr><td>G3 Confidence below 40</td><td class="n">1,402</td><td>Listing metrics are suppressed by the publisher at this population size</td></tr>
+        <tr><td>G1 Fewer than 4 pillars, or acquisition or exit missing</td><td class="n">596</td><td>Exit liquidity requires listing data that is unavailable here</td></tr>
+        <tr><td>G4 Stale inputs</td><td class="n">153</td><td>QCEW construction wage is more than two quarters old</td></tr>
+        <tr><td>G2 Peer set smaller than 30</td><td class="n">63</td><td>Too few comparable markets at this level</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ MARKET ============ -->
+<section class="screen" id="market" hidden aria-labelledby="h-market">
+  <p class="eyebrow">Market &middot; County</p>
+  <h2 id="h-market">Placeholder County A</h2>
+  <p class="sub">Peer set: top population tertile, 1,033 counties. Rank 1 of 1,033. As of March 9. Oldest contributing observation: ACS 5-year, published 12 months ago.</p>
+
+  <div class="grid g-2-1" style="margin-bottom:18px">
+    <div class="card">
+      <div class="grid g2">
+        <div>
+          <p class="lab">Flip Opportunity</p>
+          <p class="big num">62.4</p>
+          <p class="note">Model v1.0.0 &middot; <span class="tag unval">Prior weights, not validated</span></p>
+        </div>
+        <div>
+          <p class="lab">Confidence</p>
+          <p class="big num">71</p>
+          <p class="note" style="font-weight:700;color:var(--navy)">High</p>
+          <div class="meter" role="img" aria-label="Confidence 71 of 100, High band">
+            <span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span>
+            <span class="on"></span><span class="on gold"></span><span></span>
+          </div>
+        </div>
+      </div>
+      <p class="note" style="margin-top:12px">Opportunity and confidence are computed independently. A high opportunity score with low confidence means the visible evidence looks favorable and you are seeing little of it.</p>
+    </div>
+
+    <div class="card">
+      <h4>Confidence components</h4>
+      <table>
+        <caption class="sr">Confidence component breakdown</caption>
+        <tbody>
+          <tr><td>Coverage</td><td class="n">79</td></tr>
+          <tr><td>Freshness</td><td class="n">74</td></tr>
+          <tr><td>Agreement</td><td class="n">71</td></tr>
+          <tr><td>History</td><td class="n">100</td></tr>
+          <tr><td>Sample</td><td class="n">81</td></tr>
+          <tr><td>Precision</td><td class="n">100</td></tr>
+          <tr><td>Stability</td><td class="n">62</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid g-2-1">
+    <div class="card">
+      <h4>What raised and lowered this score</h4>
+      <p class="note" style="margin-bottom:10px">Signed contribution against the peer set median.</p>
+
+      <div class="dbar"><span>Acquisition &middot; 0.22</span>
+        <div class="dtrack"><div class="dmid"></div><div class="dfill" style="left:50%;width:28%"></div></div>
+        <span class="n">+6.2</span></div>
+      <div class="dbar"><span>Exit liquidity &middot; 0.24</span>
+        <div class="dtrack"><div class="dmid"></div><div class="dfill neg" style="right:50%;width:14%"></div></div>
+        <span class="n">&minus;1.4</span></div>
+      <div class="dbar"><span>Renovation &middot; 0.06</span>
+        <div class="dtrack"><div class="dmid"></div><div class="dfill" style="left:50%;width:3%"></div></div>
+        <span class="n">+0.3</span></div>
+      <div class="dbar"><span>Carrying &middot; 0.10</span>
+        <div class="dtrack"><div class="dmid"></div><div class="dfill neg" style="right:50%;width:12%"></div></div>
+        <span class="n">&minus;1.2</span></div>
+      <div class="dbar"><span>Transaction &middot; 0.05</span>
+        <div class="dtrack"><div class="dmid"></div><div class="dfill" style="left:50%;width:6%"></div></div>
+        <span class="n">+0.6</span></div>
+      <div class="dbar"><span>Economic &middot; 0.18</span>
+        <div class="dtrack"><div class="dmid"></div><div class="dfill" style="left:50%;width:29%"></div></div>
+        <span class="n">+2.9</span></div>
+      <div class="dbar"><span>Risk &middot; 0.15</span>
+        <div class="dtrack"><div class="dmid"></div><div class="dfill" style="left:50%;width:2%"></div></div>
+        <span class="n">+0.2</span></div>
+
+      <div class="callout" style="margin-top:14px">
+        <h4>Factors that could not be measured</h4>
+        <ul class="tight">
+          <li><strong>Distressed inventory and foreclosure activity.</strong> No free national source exists. This is missing for every market in the United States and costs each one roughly 6 coverage points.</li>
+          <li><strong>Local renovation unit cost.</strong> National materials index only. The renovation pillar uses county construction wages and permit volume as proxies, both unvalidated.</li>
+          <li><strong>Current insurance cost.</strong> Latest available data ends in 2022.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>Provenance</h4>
+      <p class="note">Every number on this page traces to a stored artifact.</p>
+      <table>
+        <caption class="sr">Data provenance for this market</caption>
+        <thead><tr><th scope="col">Metric</th><th scope="col">Level</th><th scope="col">Age</th></tr></thead>
+        <tbody>
+          <tr><td>Days on market <span class="tag lic">Unverified license</span></td><td>county</td><td>18 d</td></tr>
+          <tr><td>Price reduction share <span class="tag lic">Unverified license</span></td><td>county</td><td>18 d</td></tr>
+          <tr><td>HPI, repeat sale</td><td>county</td><td>74 d</td></tr>
+          <tr><td>Unemployment rate</td><td>county</td><td>41 d</td></tr>
+          <tr><td>Construction wage</td><td>county</td><td>152 d</td></tr>
+          <tr><td>Effective property tax</td><td>county</td><td>396 d</td></tr>
+          <tr><td>Hazard risk index</td><td>county</td><td>static</td></tr>
+        </tbody>
+      </table>
+      <p class="note" style="margin-top:10px">Export is blocked for figures whose lineage includes an unverified source.</p>
+    </div>
+  </div>
+
+  <h3>Indicators</h3>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px">
+      <div class="pills" role="group" aria-label="Chart period">
+        <button type="button" aria-pressed="false">3m</button>
+        <button type="button" aria-pressed="false">6m</button>
+        <button type="button" aria-pressed="true">1y</button>
+        <button type="button" aria-pressed="false">3y</button>
+        <button type="button" aria-pressed="false">5y</button>
+        <button type="button" aria-pressed="false">Max</button>
+      </div>
+      <button class="prov" type="button">View as data table</button>
+    </div>
+    <div class="chart">
+      <svg viewBox="0 0 760 230" role="img" aria-label="Placeholder chart of three indicator series over one year">
+        <g stroke="#EDF1F3" stroke-width="1">
+          <line x1="0" y1="40" x2="760" y2="40"/><line x1="0" y1="85" x2="760" y2="85"/>
+          <line x1="0" y1="130" x2="760" y2="130"/><line x1="0" y1="175" x2="760" y2="175"/>
+        </g>
+        <rect x="560" y="0" width="200" height="230" fill="#FAFAF9"/>
+        <text x="566" y="18" font-size="10" fill="#7C8A93" font-family="DM Sans">Low confidence period</text>
+        <polyline fill="none" stroke="#1E3D4C" stroke-width="2"
+          points="10,150 74,146 138,140 202,132 266,128 330,120 394,112 458,104 522,98 586,92 650,88 714,84"/>
+        <polyline fill="none" stroke="#C2734D" stroke-width="2"
+          points="10,96 74,100 138,98 202,106 266,112 330,110 394,118 458,124 522,130 586,134 650,140 714,146"/>
+        <polyline fill="none" stroke="#B8924A" stroke-width="2" stroke-dasharray="4 3"
+          points="10,180 74,176 138,172 202,166 266,158 330,152 394,144 458,138 522,132 586,126 650,120 714,116"/>
+      </svg>
+    </div>
+    <div class="legend" role="group" aria-label="Toggle series">
+      <button type="button" aria-pressed="true"><span class="swatch" style="background:#1E3D4C"></span>Active listings</button>
+      <button type="button" aria-pressed="true"><span class="swatch" style="background:#C2734D"></span>Pending to active</button>
+      <button type="button" aria-pressed="true"><span class="swatch" style="background:#B8924A"></span>Price reduction share</button>
+      <button type="button" aria-pressed="false"><span class="swatch" style="background:#5A6B75"></span>Median days on market</button>
+      <button type="button" aria-pressed="false"><span class="swatch" style="background:#A0522D"></span>Sale to list</button>
+      <button type="button" aria-pressed="false"><span class="swatch" style="background:#142A36"></span>HPI year over year</button>
+      <button type="button" aria-pressed="false"><span class="swatch" style="background:#7C8A93"></span>Unemployment</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WATCHLIST ============ -->
+<section class="screen" id="watchlist" hidden aria-labelledby="h-watch">
+  <p class="eyebrow">Watchlist</p>
+  <h2 id="h-watch">Followed markets</h2>
+  <p class="sub">Pin markets to compare them side by side. Change columns show movement since the previous score run.</p>
+  <div class="tblwrap">
+    <table>
+      <caption>Placeholder watchlist</caption>
+      <thead><tr>
+        <th scope="col">Market</th><th scope="col">Level</th>
+        <th scope="col" class="n">Opp</th><th scope="col" class="n">1w</th><th scope="col" class="n">4w</th>
+        <th scope="col" class="n">Conf</th><th scope="col" class="n">DOM</th><th scope="col" class="n">Cuts</th>
+        <th scope="col" class="n">Inv YoY</th><th scope="col">Patterns</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>Placeholder County A</td><td>county</td><td class="n">62.4</td><td class="n">&#9650; 3.1</td><td class="n">&#9650; 5.6</td><td class="n">71</td><td class="n">44</td><td class="n">21.4%</td><td class="n">+19%</td><td><span class="tag pattern">Buyer leverage</span></td></tr>
+        <tr><td>Placeholder Metro B</td><td>cbsa</td><td class="n">57.9</td><td class="n">&#9660; 1.8</td><td class="n">&#9660; 4.2</td><td class="n">68</td><td class="n">61</td><td class="n">27.8%</td><td class="n">+31%</td><td><span class="tag pattern">Exit deterioration</span></td></tr>
+        <tr><td>Placeholder County C</td><td>county</td><td class="n">n/a</td><td class="n">n/a</td><td class="n">n/a</td><td class="n">38</td><td class="n">n/a</td><td class="n">n/a</td><td class="n">n/a</td><td><span class="tag withheld">Withheld</span></td></tr>
+        <tr><td>Placeholder ZCTA D</td><td>zcta</td><td class="n">49.1</td><td class="n">&#9650; 0.4</td><td class="n">&#9660; 0.9</td><td class="n">52</td><td class="n">38</td><td class="n">16.2%</td><td class="n">+7%</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout navy" style="margin-top:16px">
+    <h4>Placeholder ZCTA D is a mixed-resolution view</h4>
+    <p style="margin:0">Price and listing metrics are native to ZIP. Employment, income, and property tax arrive from the containing county through a crosswalk at an allocation weight of 0.86. This is why its geographic precision component is 68 rather than 100.</p>
+  </div>
+</section>
+
+<!-- ============ PATTERNS ============ -->
+<section class="screen" id="patterns" hidden aria-labelledby="h-pat">
+  <p class="eyebrow">Patterns</p>
+  <h2 id="h-pat">Pattern library</h2>
+  <p class="sub">Three patterns are implemented. The remaining twelve named in the specification are documented as educational entries and marked not implemented, which is more honest than shipping thin versions of all of them.</p>
+
+  <div class="grid g3" style="margin-bottom:20px">
+    <div class="card lift"><p class="lab">Implemented</p><p class="mid num">3</p><p class="note">all unvalidated</p></div>
+    <div class="card lift"><p class="lab">Documented only</p><p class="mid num">12</p><p class="note">no data or no spec yet</p></div>
+    <div class="card lift"><p class="lab">Retired</p><p class="mid num">0</p><p class="note">kept visible when it happens</p></div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start">
+      <div>
+        <span class="tag pattern">Pattern</span> <span class="tag unval">Unvalidated</span>
+        <h3 style="margin:8px 0 2px">Increasing Buyer Leverage</h3>
+        <p class="note">v1.0.0 &middot; eligible at CBSA and county &middot; minimum confidence 60</p>
+      </div>
+    </div>
+
+    <h4 style="margin-top:16px">Definition</h4>
+    <p style="font-size:13.5px;margin:0">Supply is building, homes are taking longer to sell, and sellers are cutting prices, while transaction prices and local employment have not yet broken.</p>
+
+    <h4 style="margin-top:14px">Signals</h4>
+    <table>
+      <caption class="sr">Signals for Increasing Buyer Leverage</caption>
+      <thead><tr><th scope="col">Signal</th><th scope="col">Required</th><th scope="col">Threshold</th><th scope="col">Persistence</th></tr></thead>
+      <tbody>
+        <tr><td>Active listings year over year</td><td>Yes</td><td>at or above own 20-quarter 70th percentile</td><td>3 periods</td></tr>
+        <tr><td>Median days on market year over year</td><td>Yes</td><td>at or above own 20-quarter 70th percentile</td><td>3 periods</td></tr>
+        <tr><td>Price reduction share year over year</td><td>Yes</td><td>at or above own 20-quarter 70th percentile</td><td>2 periods</td></tr>
+        <tr><td>Median sale price year over year</td><td>Corroborating</td><td>between &minus;2.0 and +4.0 percent</td><td>1 period</td></tr>
+        <tr><td>Unemployment 12-month change</td><td>Corroborating</td><td>at or below +0.5 points</td><td>1 period</td></tr>
+      </tbody>
+    </table>
+
+    <h4 style="margin-top:14px">What would invalidate this</h4>
+    <ul class="tight">
+      <li>Unemployment rising more than 1.5 points over 12 months. That reclassifies the pattern as demand collapse rather than buyer leverage.</li>
+      <li>Median sale price falling more than 6 percent year over year. The acquisition window has become a falling knife.</li>
+      <li>Active listings falling back below the own-history median for 2 consecutive periods.</li>
+    </ul>
+
+    <h4 style="margin-top:14px">Historical behavior</h4>
+    <div class="callout gold">
+      <p style="margin:0"><strong>No historical validation yet.</strong> This pattern has not been backtested. It is a described combination of current signals, not a demonstrated predictor. Until validation produces at least 30 instances across at least 8 markets and 3 calendar years, PatternIQ will not tell you what usually happens next, because it does not know.</p>
+    </div>
+
+    <h4 style="margin-top:14px">Known failure conditions to watch for</h4>
+    <p style="font-size:13.5px;margin:0">This fires identically at the start of a normal seasonal inventory build and at the start of a genuine correction. Year-over-year framing handles most seasonality, but a market with an unusual seasonal profile can still trip it.</p>
+
+    <h4 style="margin-top:14px">What to watch next</h4>
+    <p style="font-size:13.5px;margin:0">Sale-to-list ratio, pending-to-active ratio, months of supply. If those deteriorate alongside, the read shifts from buyer leverage to demand deterioration.</p>
+  </div>
+</section>
+
+<!-- ============ DEAL ANALYZER ============ -->
+<section class="screen" id="deal" hidden aria-labelledby="h-deal">
+  <p class="eyebrow">Deal Analyzer</p>
+  <h2 id="h-deal">Underwrite a property</h2>
+  <p class="sub">Arithmetic on your own assumptions. No model output appears here until calibration passes, so every number below is a consequence of what you entered.</p>
+
+  <div class="grid g-2-1">
+    <form class="card">
+      <fieldset>
+        <legend>Property</legend>
+        <div class="grid g2">
+          <div class="field"><label for="d-addr">Address</label><input id="d-addr" value="000 Placeholder St"><p class="hint">Stored locally, never sourced from a licensed feed</p></div>
+          <div class="field"><label for="d-market">Market</label><input id="d-market" value="Placeholder County A"></div>
+          <div class="field"><label for="d-sqft">Square feet</label><input id="d-sqft" inputmode="decimal" value="1,480"></div>
+          <div class="field"><label for="d-beds">Beds and baths</label><input id="d-beds" value="3 / 2.0"></div>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Acquisition and renovation</legend>
+        <div class="grid g2">
+          <div class="field"><label for="d-price">Purchase price</label><input id="d-price" inputmode="decimal" value="238,000"></div>
+          <div class="field"><label for="d-arv">Estimated ARV</label><input id="d-arv" inputmode="decimal" value="365,000"><p class="hint">Your estimate. PatternIQ has no comps data on the free plan.</p></div>
+          <div class="field"><label for="d-reno">Renovation budget</label><input id="d-reno" inputmode="decimal" value="62,000"></div>
+          <div class="field"><label for="d-cont">Contingency</label><input id="d-cont" inputmode="decimal" value="12%"></div>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Carry and financing</legend>
+        <div class="grid g2">
+          <div class="field"><label for="d-rate">Interest rate</label><input id="d-rate" inputmode="decimal" value="10.75%"><p class="hint">Rehab loan rates are not published anywhere. This is your input, defaulted.</p></div>
+          <div class="field"><label for="d-hold">Holding period, days</label><input id="d-hold" inputmode="decimal" value="150"></div>
+          <div class="field"><label for="d-tax">Property tax rate</label><input id="d-tax" inputmode="decimal" value="1.42%"><p class="hint">Prefilled from ACS county estimate. Reassessment at sale is not modeled.</p></div>
+          <div class="field"><label for="d-ins">Insurance, annual</label><input id="d-ins" inputmode="decimal" value="2,400"></div>
+        </div>
+      </fieldset>
+    </form>
+
+    <div>
+      <div class="tabs" role="tablist" aria-label="Scenario">
+        <button role="tab" aria-selected="false" type="button">Conservative</button>
+        <button role="tab" aria-selected="true" type="button">Base</button>
+        <button role="tab" aria-selected="false" type="button">Optimistic</button>
+      </div>
+      <div class="card">
+        <p class="lab">Expected net profit</p>
+        <p class="big num">$38,420</p>
+        <p class="note"><span class="tag fact">Arithmetic</span> computed from your inputs, not a forecast</p>
+        <table style="margin-top:12px">
+          <caption class="sr">Deal results</caption>
+          <tbody>
+            <tr><td>Total project cost</td><td class="n">$326,580</td></tr>
+            <tr><td>Gross profit</td><td class="n">$65,420</td></tr>
+            <tr><td>Return on cost</td><td class="n">11.8%</td></tr>
+            <tr><td>Return on cash</td><td class="n">31.2%</td></tr>
+            <tr><td>Annualized return</td><td class="n">27.4%</td></tr>
+            <tr><td>Break-even resale</td><td class="n">$326,580</td></tr>
+            <tr><td>Max advisable purchase</td><td class="n">$251,300</td></tr>
+            <tr><td>Margin of safety</td><td class="n">10.5%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <h4>Market context at time of analysis</h4>
+        <p style="font-size:13.5px;margin:0 0 8px">Opportunity 62.4, Confidence 71 High. One pattern detected.</p>
+        <div class="callout">
+          <p style="margin:0">Exit liquidity is the weakest pillar in this market at 44 of 100. Your 150-day holding assumption sits below the county median days on market of 44 plus a typical renovation window. Consider testing 180 and 210 days.</p>
+          <p class="note" style="margin:8px 0 0"><span class="tag inference">Inference</span> reasoning from the pillar breakdown, not a prediction</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Sensitivity</h3>
+  <div class="card">
+    <table>
+      <caption>Net profit across resale price and renovation cost. Placeholder values.</caption>
+      <thead><tr><th scope="col">Reno &#8595; / Resale &#8594;</th><th scope="col" class="n">$330k</th><th scope="col" class="n">$347k</th><th scope="col" class="n">$365k</th><th scope="col" class="n">$383k</th><th scope="col" class="n">$400k</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">$52,000</th><td class="n">$13,900</td><td class="n">$30,000</td><td class="n">$47,000</td><td class="n">$64,000</td><td class="n">$80,100</td></tr>
+        <tr><th scope="row">$62,000</th><td class="n">$5,300</td><td class="n">$21,400</td><td class="n">$38,420</td><td class="n">$55,400</td><td class="n">$71,500</td></tr>
+        <tr><th scope="row">$72,000</th><td class="n">&minus;$3,300</td><td class="n">$12,800</td><td class="n">$29,800</td><td class="n">$46,800</td><td class="n">$62,900</td></tr>
+        <tr><th scope="row">$82,000</th><td class="n">&minus;$11,900</td><td class="n">$4,200</td><td class="n">$21,200</td><td class="n">$38,200</td><td class="n">$54,300</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ PORTFOLIO ============ -->
+<section class="screen" id="portfolio" hidden aria-labelledby="h-port">
+  <p class="eyebrow">Portfolio</p>
+  <h2 id="h-port">Projects, planned against actual</h2>
+  <p class="sub">Your own record is the only data in PatternIQ that measures what you actually care about.</p>
+
+  <div class="tblwrap" style="margin-bottom:18px">
+    <table>
+      <caption>Placeholder projects</caption>
+      <thead><tr>
+        <th scope="col">Project</th><th scope="col">Status</th>
+        <th scope="col" class="n">Purchase</th><th scope="col" class="n">Reno plan</th><th scope="col" class="n">Reno actual</th>
+        <th scope="col" class="n">Days plan</th><th scope="col" class="n">Days actual</th>
+        <th scope="col" class="n">Net profit</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>Project 1</td><td>Sold</td><td class="n">$212,000</td><td class="n">$54,000</td><td class="n">$61,300</td><td class="n">140</td><td class="n">176</td><td class="n">$29,400</td></tr>
+        <tr><td>Project 2</td><td>Sold</td><td class="n">$188,500</td><td class="n">$47,000</td><td class="n">$52,900</td><td class="n">130</td><td class="n">151</td><td class="n">$34,100</td></tr>
+        <tr><td>Project 3</td><td>Listed</td><td class="n">$244,000</td><td class="n">$68,000</td><td class="n">n/a</td><td class="n">160</td><td class="n">n/a</td><td class="n">n/a</td></tr>
+        <tr><td>Project 4</td><td>Renovating</td><td class="n">$201,000</td><td class="n">$58,000</td><td class="n">$41,200 to date</td><td class="n">145</td><td class="n">n/a</td><td class="n">n/a</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid g2">
+    <div class="card">
+      <h4>Variance by renovation category</h4>
+      <table>
+        <caption class="sr">Planned versus actual by category</caption>
+        <thead><tr><th scope="col">Category</th><th scope="col" class="n">Projects</th><th scope="col" class="n">Mean variance</th><th scope="col">Status</th></tr></thead>
+        <tbody>
+          <tr><td>Kitchen</td><td class="n">2</td><td class="n">+14.2%</td><td class="note">Not enough projects to say anything</td></tr>
+          <tr><td>Bathroom</td><td class="n">2</td><td class="n">+8.1%</td><td class="note">Not enough projects to say anything</td></tr>
+          <tr><td>Roof</td><td class="n">1</td><td class="n">+2.0%</td><td class="note">Not enough projects to say anything</td></tr>
+          <tr><td>Flooring</td><td class="n">2</td><td class="n">&minus;1.4%</td><td class="note">Not enough projects to say anything</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h4>Personal patterns</h4>
+      <div class="callout gold">
+        <h4>Nothing to report yet</h4>
+        <p style="margin:0">Personal patterns need at least 3 completed projects in a category before an early signal is shown, and at least 6 before it is presented as a pattern. You have 2 completed projects. PatternIQ will not draw a conclusion from that.</p>
+      </div>
+      <p class="note" style="margin-top:12px">At 3 to 5 projects: shown as an early signal with the sample size in the headline. At 6 to 9: shown with a confidence interval on the effect size. At 10 or more: eligible to adjust your personalized estimates, with your explicit approval.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RUN ANALYSIS ============ -->
+<section class="screen" id="analysis" hidden aria-labelledby="h-ana">
+  <p class="eyebrow">Run Analysis</p>
+  <h2 id="h-ana">What does my history tell me</h2>
+  <p class="sub">Findings ranked by financial significance, each with its sample size and confidence stated in the headline rather than the footnote.</p>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="pills" role="group" aria-label="Analysis scope">
+      <button type="button" aria-pressed="true">Entire portfolio</button>
+      <button type="button" aria-pressed="false">Profitability</button>
+      <button type="button" aria-pressed="false">Budget accuracy</button>
+      <button type="button" aria-pressed="false">Renovations</button>
+      <button type="button" aria-pressed="false">Timing</button>
+      <button type="button" aria-pressed="false">Markets</button>
+      <button type="button" aria-pressed="false">Acquisition</button>
+      <button type="button" aria-pressed="false">Exit</button>
+      <button type="button" aria-pressed="false">Risk</button>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <span class="tag inference">Inference</span>
+    <h3 style="margin:8px 0 4px">Holding periods have run longer than planned in both completed projects</h3>
+    <table style="margin-top:10px">
+      <caption class="sr">Supporting data</caption>
+      <thead><tr><th scope="col">Project</th><th scope="col" class="n">Planned</th><th scope="col" class="n">Actual</th><th scope="col" class="n">Variance</th></tr></thead>
+      <tbody>
+        <tr><td>Project 1</td><td class="n">140</td><td class="n">176</td><td class="n">+36 d</td></tr>
+        <tr><td>Project 2</td><td class="n">130</td><td class="n">151</td><td class="n">+21 d</td></tr>
+      </tbody>
+    </table>
+    <div class="callout gold" style="margin-top:12px">
+      <h4>Sample size 2. This is an observation, not a pattern.</h4>
+      <p style="margin:0">Two projects cannot establish a tendency. Financial significance if it holds: roughly $2,100 in additional carrying cost per project at your current financing terms. PatternIQ will revisit this at 6 completed projects.</p>
+    </div>
+    <p class="note" style="margin-top:10px"><strong>Why this matters.</strong> Holding period compounds. It raises interest, taxes, insurance, and utilities simultaneously, and it delays the capital you need for the next acquisition. It is the most commonly underestimated line in flip underwriting.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag fact">Fact</span>
+    <h3 style="margin:8px 0 4px">Renovation costs exceeded budget in both completed projects</h3>
+    <p style="font-size:13.5px">Project 1: $54,000 planned, $61,300 actual, 13.5 percent over. Project 2: $47,000 planned, $52,900 actual, 12.6 percent over.</p>
+    <p class="note">Recommended question rather than recommended action: is your contingency percentage set below your own observed overrun rate? You currently use 12 percent.</p>
+  </div>
+</section>
+
+<!-- ============ LEARN ============ -->
+<section class="screen" id="learn" hidden aria-labelledby="h-learn">
+  <p class="eyebrow">Learn</p>
+  <h2 id="h-learn">Median days on market</h2>
+  <p class="sub">Every metric in PatternIQ carries the same ten-part explanation, versioned so that a score from March shows the explanation that was current in March.</p>
+
+  <div class="grid g-2-1">
+    <div class="card">
+      <h4>1. Definition</h4>
+      <p style="font-size:13.5px">The middle value of the number of days that listings sold in a period spent on the market before going under contract.</p>
+      <h4 style="margin-top:14px">2. How it is calculated</h4>
+      <p style="font-size:13.5px">The publisher takes every listing that went pending in the period, computes days between list date and pending date, and reports the median. PatternIQ does not recompute it.</p>
+      <h4 style="margin-top:14px">3. Why investors track it</h4>
+      <p style="font-size:13.5px">It is the most direct available measure of how long it takes to convert a finished property into cash. For a flip, holding period is a cost that compounds across interest, taxes, insurance, and utilities at once.</p>
+      <h4 style="margin-top:14px">4. What rising values can mean</h4>
+      <p style="font-size:13.5px">Demand is softening relative to supply, pricing is ahead of what buyers will pay, or the mix of what is selling has shifted toward harder-to-sell property. Rising days on market usually precedes falling prices rather than following them.</p>
+      <h4 style="margin-top:14px">5. What falling values can mean</h4>
+      <p style="font-size:13.5px">Demand is firming, or inventory has thinned so that what remains is the more desirable stock. A fall driven by scarcity is different from one driven by demand, and the two are distinguished by looking at new listings alongside.</p>
+      <h4 style="margin-top:14px">6. Interactions</h4>
+      <p style="font-size:13.5px">Read alongside price reduction share and sale-to-list ratio. Days on market rising while price cuts stay flat suggests sellers are waiting rather than capitulating. Rising alongside cuts suggests capitulation has begun.</p>
+      <h4 style="margin-top:14px">7. Common interpretation mistakes</h4>
+      <ul class="tight">
+        <li>Treating it as a measure of the whole market. It only describes properties that sold. Listings that never sold are invisible in it.</li>
+        <li>Comparing it across publishers. Realtor.com and Redfin define it differently and the levels are not interchangeable.</li>
+        <li>Ignoring relistings. A listing withdrawn and relisted restarts the clock, which understates true time to sell in slow markets, exactly when you most want the truth.</li>
+      </ul>
+      <h4 style="margin-top:14px">8. Example</h4>
+      <p style="font-size:13.5px">A county reports 44 days this month against 31 a year ago. That is a 42 percent increase, at the 78th percentile of its own five-year history. Combined with price cuts at 21 percent of listings, that is two of three required signals for Increasing Buyer Leverage.</p>
+      <h4 style="margin-top:14px">9. Data source</h4>
+      <p style="font-size:13.5px">Realtor.com Residential Inventory Core Metrics, county level. License status unverified, so figures derived from it cannot be exported.</p>
+      <h4 style="margin-top:14px">10. Update frequency</h4>
+      <p style="font-size:13.5px">Monthly, published roughly one to two weeks after month end.</p>
+    </div>
+    <div class="card">
+      <h4>Metric index</h4>
+      <ul class="tight">
+        <li>Active listing count</li>
+        <li>Confidence Score</li>
+        <li>Effective property tax rate</li>
+        <li>Flip Opportunity Score</li>
+        <li>House price index, repeat sale</li>
+        <li>Median days on market</li>
+        <li>Months of supply</li>
+        <li>Peer set</li>
+        <li>Pending to active ratio</li>
+        <li>Price reduction share</li>
+        <li>Sale to list ratio</li>
+        <li>Unemployment rate</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SOURCES ============ -->
+<section class="screen" id="sources" hidden aria-labelledby="h-src">
+  <p class="eyebrow">Data and Sources</p>
+  <h2 id="h-src">Where everything comes from</h2>
+  <p class="sub">Including what is missing, what is stale, what is legally unresolved, and what the backtest found. Negative results appear here with the same prominence as positive ones.</p>
+
+  <h3>Sources in use</h3>
+  <div class="tblwrap">
+    <table>
+      <caption class="sr">Data sources currently ingested</caption>
+      <thead><tr>
+        <th scope="col">Source</th><th scope="col">Supplies</th><th scope="col">Level</th>
+        <th scope="col">Cadence</th><th scope="col">Last update</th><th scope="col">License</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>FHFA House Price Index</td><td>Repeat-sale price index</td><td>state, CBSA, county, ZIP5, tract</td><td>Quarterly and annual</td><td>74 d ago</td><td><span class="tag">Public domain</span></td></tr>
+        <tr><td>BLS LAUS</td><td>Unemployment</td><td>state, CBSA, county</td><td>Monthly</td><td>41 d ago</td><td><span class="tag">Public domain</span></td></tr>
+        <tr><td>BLS QCEW</td><td>Employment, construction wage</td><td>county</td><td>Quarterly</td><td>152 d ago</td><td><span class="tag">Public domain</span></td></tr>
+        <tr><td>Census ACS 5-year</td><td>Income, tenure, tax paid, vacancy</td><td>county, tract, ZCTA</td><td>Annual</td><td>396 d ago</td><td><span class="tag">Public domain</span></td></tr>
+        <tr><td>Census BPS</td><td>Building permits</td><td>state, CBSA, county, place</td><td>Monthly</td><td>28 d ago</td><td><span class="tag">Public domain</span></td></tr>
+        <tr><td>FEMA NRI and OpenFEMA</td><td>Hazard risk, disaster history</td><td>county, tract</td><td>Static and ongoing</td><td>static</td><td><span class="tag">Public domain</span></td></tr>
+        <tr><td>Freddie Mac PMMS</td><td>30-year mortgage rate</td><td>national</td><td>Weekly</td><td>4 d ago</td><td><span class="tag">Attribution</span></td></tr>
+        <tr><td>Realtor.com Core Metrics</td><td>DOM, listings, price cuts, pending</td><td>CBSA, county, ZIP</td><td>Monthly</td><td>18 d ago</td><td><span class="tag lic">Unverified</span></td></tr>
+        <tr><td>Redfin Data Center</td><td>Sale price, sale to list, sold above list</td><td>CBSA, county, ZIP</td><td>Monthly</td><td>18 d ago</td><td><span class="tag lic">Unverified</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Known gaps</h3>
+  <div class="grid g2">
+    <div class="card">
+      <h4>Distressed inventory and foreclosure activity</h4>
+      <p style="font-size:13.5px;margin:0 0 6px">No free national source exists. County recorders hold the primary records across more than 3,000 jurisdictions in inconsistent formats, many prohibiting bulk automated access.</p>
+      <p class="note"><strong>Effect:</strong> every market loses roughly 6 coverage points. The acquisition pillar measures less than it should.<br><strong>Cost to close:</strong> roughly $599 per month for PropertyRadar with API access, or a contract negotiation with ATTOM.</p>
+    </div>
+    <div class="card">
+      <h4>Local renovation cost</h4>
+      <p style="font-size:13.5px;margin:0 0 6px">Materials indexes are national only. There is no free equivalent of the RSMeans city cost index.</p>
+      <p class="note"><strong>Effect:</strong> the renovation pillar carries a weight of 0.06 and relies on two unvalidated proxies.<br><strong>Cost to close:</strong> RSMeans license, price not published.</p>
+    </div>
+    <div class="card">
+      <h4>Current insurance cost</h4>
+      <p style="font-size:13.5px;margin:0 0 6px">The best free ZIP-level data ends in 2022, in the middle of the largest premium repricing in decades.</p>
+      <p class="note"><strong>Effect:</strong> insurance contributes almost nothing to confidence and its freshness score is effectively zero.</p>
+    </div>
+    <div class="card">
+      <h4>Property-level data and comps</h4>
+      <p style="font-size:13.5px;margin:0 0 6px">Free data supports market analysis, not address-level underwriting. The Deal Analyzer runs on your own assumptions.</p>
+      <p class="note"><strong>Cost to close:</strong> RentCast at $74 per month is the cheapest credible path and the recommended first purchase.</p>
+    </div>
+  </div>
+
+  <h3>Backtest results</h3>
+  <div class="card">
+    <div class="callout navy">
+      <h4>No backtest has run yet</h4>
+      <p style="margin:0">The Opportunity Score is using declared prior weights that have never been tested against realized outcomes. Until the backtest harness runs and clears its sample gates, treat every score in this product as a structured summary of current evidence and not as a demonstrated predictor.</p>
+    </div>
+    <p class="note" style="margin-top:12px">When results exist, this panel shows the information coefficient time series with its Newey-West statistic, the decile spread table, comparison against the four required baselines, and per-pattern lift with confidence intervals and false discovery rate adjusted p-values. A negative result is published here at the same size as a positive one.</p>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+(function(){
+  var buttons = document.querySelectorAll('nav.side button[data-screen]');
+  var screens = document.querySelectorAll('.screen');
+  var announce = document.getElementById('announce');
+  function show(id, label){
+    screens.forEach(function(s){ s.hidden = (s.id !== id); });
+    buttons.forEach(function(b){
+      if(b.dataset.screen === id){ b.setAttribute('aria-current','page'); }
+      else { b.removeAttribute('aria-current'); }
+    });
+    document.getElementById('main').focus();
+    announce.textContent = label + ' screen loaded';
+    window.scrollTo(0,0);
+    send();
+  }
+  buttons.forEach(function(b){
+    b.addEventListener('click', function(){ show(b.dataset.screen, b.textContent.trim()); });
+  });
+
+  // Generic pressed-state toggles for wireframe affordances
+  document.querySelectorAll('.pills button, .legend button').forEach(function(b){
+    b.addEventListener('click', function(){
+      var group = b.closest('.pills');
+      if(group){ group.querySelectorAll('button').forEach(function(x){ x.setAttribute('aria-pressed','false'); }); b.setAttribute('aria-pressed','true'); }
+      else { b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); }
+    });
+  });
+  document.querySelectorAll('.tabs button').forEach(function(b){
+    b.addEventListener('click', function(){
+      b.closest('.tabs').querySelectorAll('button').forEach(function(x){ x.setAttribute('aria-selected','false'); });
+      b.setAttribute('aria-selected','true');
+    });
+  });
+
+  // Iframe height sender
+  function send(){
+    try{
+      var h = document.documentElement.scrollHeight;
+      window.parent.postMessage({ id:'patterniq-wireframes', height:h, frameHeight:h }, '*');
+    }catch(e){}
+  }
+  window.addEventListener('load', send);
+  window.addEventListener('resize', send);
+  if(window.ResizeObserver){ new ResizeObserver(send).observe(document.body); }
+  send();
+})();
+</script>
+</body>
+</html>
