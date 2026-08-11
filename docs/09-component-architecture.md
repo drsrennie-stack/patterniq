@@ -25,23 +25,69 @@ Two additional rules that follow from Section 27 rather than Section 25:
 
 ## 9.2 Palette and type
 
-Taken from your existing primary palette, since PatternIQ has no palette of its own yet. Change it and the wireframes change with it, since everything is driven by CSS custom properties in one block.
+Two themes ship in one stylesheet, driven entirely by CSS custom properties on `:root[data-theme]`. **Terminal is the default.** Research is the earlier light comp, kept as a toggle so the two can be compared on the same content rather than argued about in the abstract.
+
+### Terminal (default)
+
+The professional trading-desk read. Dark ground, dense rows, monospace numerics, green and red deltas.
 
 | Token | Value | Use |
 |---|---|---|
-| Navy | `#1E3D4C` | Primary text, headers, table borders, completed and confirmed states |
-| Navy deep | `#142A36` | Hover on navy, chart primary series |
-| Navy tint | `#EDF1F3` | Selected row fill, table header fill |
-| Brushed gold | `#B8924A` | Key accents, primary action, unvalidated markers |
-| Terra cotta | `#C2734D` | Eyebrow text, secondary series |
-| Terra dark | `#A0522D` | Subheads, emphasis, caution states |
-| Off white | `#FAFAF9` | Page background |
-| White | `#FFFFFF` | Card and table surfaces |
-| Slate | `#5A6B75` | Secondary text, axis labels |
+| Background | `#0A0E14` | Page ground |
+| Panel | `#111820` | Card and table surface |
+| Panel 2 | `#18212C` | Inset surfaces, row hover, input ground |
+| Header | `#1B2530` | Panel headers, table headers |
+| Line | `#232E3C` | Borders, panel chrome |
+| Text | `#D6E1EC` | Primary text and numerals |
+| Dim | `#9BAFC4` | Body copy inside panels, table notes |
+| Faint | `#7C90A4` | Small caps labels, axis labels, metadata |
+| Up | `#3DD68C` | Favorable direction, rising candles, positive deltas |
+| Down | `#FF8080` | Unfavorable direction, falling candles, negative deltas |
+| Gold | `#E0A93C` | Brand accent, active state, unvalidated markers, break-even |
+| Cyan | `#5BC8E8` | Primary data series, depth bars, confidence meter |
+| Violet | `#A99BF0` | Pattern tags and pattern series |
+| Grid | `#1A2431` | Chart gridlines, empty meter segments |
 
-Type: Plus Jakarta Sans for display and headings, DM Sans for eyebrow and UI labels, and a tabular-numeral system stack for all numeric cells. No italics anywhere, per your standing rule, so emphasis uses weight and color only.
+### Research (toggle)
 
-Non-color encoding is mandatory. Confidence bands carry a text label and a filled-segment meter, never color alone. Directional changes carry an arrow glyph and a sign, never color alone.
+| Token | Value | Use |
+|---|---|---|
+| Background | `#FAFAF9` | Page ground |
+| Panel | `#FFFFFF` | Card and table surface |
+| Header | `#EDF1F3` | Panel and table headers |
+| Text | `#1E3D4C` | Primary text |
+| Dim | `#5A6B75` | Body copy |
+| Faint | `#5C6A73` | Small caps labels |
+| Up | `#1F7A52` | Positive delta |
+| Down | `#B03A3A` | Negative delta |
+| Gold | `#856427` | Accent, focus ring, unvalidated markers |
+| Cyan | `#1E6E86` | Primary data series |
+| Violet | `#5B4EA8` | Pattern tags |
+
+Both theme token sets were contrast-tested independently. Every text pair clears AA, and most clear AAA in the terminal theme. Full table in `compliance-notes.md`.
+
+### Type
+
+- **IBM Plex Mono** for every numeral, ticker entry, axis label, threshold, and code-like value. Tabular figures are the point: columns of numbers have to align on the decimal or a dense table becomes unreadable.
+- **Plus Jakarta Sans** for headings and prose.
+- **DM Sans** for small caps labels and panel headers.
+- No italics anywhere, per your standing rule. Emphasis uses weight, color, and case.
+
+### Non-color encoding is mandatory
+
+Red and green carry meaning in this interface, which makes colorblind-safe redundancy load-bearing rather than nice to have.
+
+| Meaning | Color | Required additional encoding |
+|---|---|---|
+| Positive delta | Up green | Up triangle glyph plus a `+` sign |
+| Negative delta | Down red | Down triangle glyph plus a `−` sign |
+| Unchanged | Faint | Horizontal bar glyph plus `0.0` |
+| Rising candle | Up green, filled | Body fill present |
+| Falling candle | Down red, hollow | Body outline only |
+| Confidence band | Cyan meter | Numeric score plus the band word |
+| Claim type | Border color | Text label plus a distinct border style (solid, dashed, dotted) |
+| Validation status | Gold border | The word "Unvalidated" |
+| Withheld score | Faint | The word "Withheld" plus a stated reason |
 
 ## 9.3 Screen inventory
 
@@ -73,6 +119,10 @@ These carry the product's integrity requirements. Building them first is the rea
 | `ClaimTag` | `type` | One of fact, inference, pattern, prediction. Distinct shape and label for each. |
 | `PillarBreakdown` | `components[]` | Diverging bar chart of signed contributions against the peer median, with unavailable pillars listed below, named, with reasons. |
 | `SeriesChart` | `series[]`, `period`, `overlays[]` | Multi-series time chart with per-series toggles, period selector (3m, 6m, 1y, 3y, 5y, max), and shaded regions for periods flagged low confidence. Keyboard-navigable data points with an accessible data table alternative. |
+| `CandleChart` | `ohlc[]`, `volume[]` | Quarterly open, high, low, close of the repeat-sale index with a volume pane below carrying repeat-sale pair counts. The volume pane is not decoration: pair count is the input to the sample adequacy component of Confidence, so the chart shows the evidence behind the number directly under the number. |
+| `PersistenceGrid` | `signals[]`, `periods` | Filled and empty cells per signal per period. Makes a pattern's persistence requirement visible rather than described. |
+| `DepthBar` | `value`, `max`, `label` | Inline proportion bar for table cells. Used for withheld-gate shares, freshness, and confidence components. |
+| `Ticker` | `metrics[]` | Scrolling market metrics strip. Carries a pause control, because moving content lasting over five seconds requires a pause mechanism under WCAG 2.2.2, and the animation is suppressed entirely under `prefers-reduced-motion`. |
 | `RankTable` | `rows[]`, `columns[]` | Sticky header, sortable, column visibility, inline sparklines, right-aligned numerics with tabular figures. Every score cell carries its confidence. |
 | `PatternCard` | `detection`, `definition`, `validation` | Signals fired against signals required, strength, persistence, invalidation conditions, what to watch next. Renders the "no historical validation yet" state when validation is absent. This is the component that most needs to be built correctly. |
 | `EvidenceBlock` | `claims[]` | Ordered list of claims, each with its `ClaimTag`, supporting values, and provenance. The AI interpretation layer renders into this and cannot bypass it. |

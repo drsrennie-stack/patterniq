@@ -60,7 +60,7 @@ Milestone ordering in Step 10 puts the Confidence Score in production one milest
 |---|---|---|
 | The schema is valid PostgreSQL | `sql/schema.sql` applied to a live PostgreSQL 16 instance, unmodified except for skipping the TimescaleDB hypertable call | Applies clean. 43 tables, views, and functions created. |
 | The point-in-time core actually works | `sql/verify-bitemporal.sql` loads a first release and a revision of the same period, then queries both ways | `metric_current` returns the revision. `metric_as_of('2024-06-15')` returns the pre-revision value. `metric_as_of` before first retrieval returns zero rows. A duplicate vintage is rejected by unique constraint. |
-| The wireframes meet WCAG 2.2 AA | axe-core via Playwright against Chromium, all ten screens scanned individually with `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22aa` | 0 violations. Two contrast failures were found during the audit and fixed rather than documented as limitations. Full record in `docs/compliance-notes.md`. |
+| The wireframes meet WCAG 2.2 AA | axe-core via Playwright against Chromium, all ten screens scanned individually in both themes, twenty scans, with `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22aa` | 0 violations. Four contrast failures were found during the audit and fixed rather than documented as limitations. Full record in `docs/compliance-notes.md`. |
 | Data source facts | Every source in Step 2 verified against the live publisher in August 2026. Anything not confirmable from the publisher's own page is marked unverified rather than assumed. | Three sources carry unresolved licensing. They are named, and the resolution path is a milestone. |
 
 The audit script is included as `a11y-check.mjs` and can be re-run against any revision.

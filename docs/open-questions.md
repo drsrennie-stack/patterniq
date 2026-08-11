@@ -9,8 +9,17 @@ Two emails: Realtor.com research, and `econdata@redfin.com`. Both asking for wri
 
 If the answers are no, the score drops to six pillars and PatternIQ can rank markets on acquisition and economic conditions but not on whether you could sell. That is a materially different product and you should decide now whether it is still worth building.
 
-**2. Palette.**
-The wireframes use your existing primary palette: navy, brushed gold, terra cotta, off-white. That was a choice, not an instruction from you. PatternIQ is a new venture with no palette of its own, and the primary palette reads as credible and financial, which is what Section 25 asks for. It is also visually tied to your teaching materials. Confirm, or give me a different direction and the wireframes change in one CSS block.
+**2. Palette. Now a live comparison rather than a question in the abstract.**
+The wireframes ship with two themes and a toggle in the top right.
+
+- **Terminal**, the default. Near-black ground, monospace numerals, green and red deltas, candlestick and volume charts, a metrics ticker. This is the professional trading-desk read Section 25 asks for.
+- **Research**, the earlier light comp, kept so the two can be compared on identical content.
+
+Both clear WCAG 2.2 AA independently. The terminal theme clears AAA for everything carrying substance.
+
+The thing to decide is not which looks better in isolation. It is whether the terminal aesthetic makes the uncertainty machinery harder to see. A dark dense terminal signals authority, and this product's entire design intent is to qualify its own output. If the withheld counts, the unvalidated tags, and the confidence components read as decoration inside the terminal chrome, the theme is working against the architecture. Look at the Discover screen and the Market screen with that specifically in mind.
+
+My read is that it holds, because the withheld rows and the unvalidated markers sit in the same visual register as the scores rather than below them. But you are the one who will use it daily.
 
 **3. Where this runs.**
 Architecture assumes Docker Compose on a single VPS, roughly $20 to $40 per month. Alternatives are a local machine (free, but no scheduled Monday morning refresh unless it stays awake) or a managed platform like Railway or Fly (simpler, roughly $30 to $60 per month). This affects M00 and nothing else, but M00 is first.
