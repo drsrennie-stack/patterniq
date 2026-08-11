@@ -4,7 +4,7 @@
 
 **Project:** PatternIQ, Steps 1 to 10 review package
 **Files covered:** `wireframes/patterniq-wireframes.html`, all ten screens (Overview, Discover, Market, Watchlist, Patterns, Deal Analyzer, Portfolio, Run Analysis, Learn, Data and Sources) in **both themes** (Terminal, default; Research, toggle)
-**Date:** August 11, 2026
+**Date:** August 11, 2026 (revised: single-typeface pass)
 **Reviewer:** Dr. Sharilyn Rennie
 
 This covers the wireframe deliverable. The built application requires its own compliance notes at M11 and again at M16.
@@ -154,6 +154,7 @@ Chart series toggles and period selectors are real buttons with `aria-pressed`, 
 | Table sorting not wired | Sort state announcement untestable | Built at M12 with `aria-sort` and a live region announcement |
 | Dense ranking table scrolls horizontally below roughly 1,100 px | Fifteen columns cannot reflow to a phone without becoming useless | Accepted for now. A column visibility control and a card view for narrow screens are specified at M12. |
 | Theme preference is not persisted | Toggle resets on reload | Trivial, deferred to M11 with the rest of user preferences |
+| Single typeface at small sizes | Plus Jakarta Sans replaced the monospace face throughout at the client's direction. Numeric alignment now depends on OpenType tabular figures rather than fixed advance widths. | Verified: 0 axe violations after the change, in both themes and across all tutorial lessons. If a future browser or fallback lacks `tnum`, dense numeric columns lose decimal alignment. Acceptable and reversible in one CSS block. |
 
 `prefers-reduced-motion` is honored: all transitions are removed and the ticker animation stops entirely.
 

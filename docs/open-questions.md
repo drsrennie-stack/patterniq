@@ -12,7 +12,7 @@ If the answers are no, the score drops to six pillars and PatternIQ can rank mar
 **2. Palette. Now a live comparison rather than a question in the abstract.**
 The wireframes ship with two themes and a toggle in the top right.
 
-- **Terminal**, the default. Near-black ground, monospace numerals, green and red deltas, candlestick and volume charts, a metrics ticker. This is the professional trading-desk read Section 25 asks for.
+- **Terminal**, the default. Near-black ground, tabular numerals, green and red deltas, candlestick and volume charts, a metrics ticker. This is the professional trading-desk read Section 25 asks for.
 - **Research**, the earlier light comp, kept so the two can be compared on identical content.
 
 Both clear WCAG 2.2 AA independently. The terminal theme clears AAA for everything carrying substance.

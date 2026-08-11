@@ -2,6 +2,8 @@
 
 Printable companion to the interactive course. The course itself is `patterniq-tutorial.html`, 23 lessons across 6 modules, each with a check-yourself question. This document is the reference version: the same substance, condensed, for searching and printing.
 
+Typography note: the course uses Plus Jakarta Sans throughout, with OpenType tabular figures for numeric alignment. No monospace face is used anywhere.
+
 All real figures below were retrieved from their publishers on 11 August 2026 and cross-checked where a second independent source existed. Full provenance: `docs/11-sample-data-provenance.md`.
 
 ---
@@ -79,7 +81,7 @@ All figures: real, July 2026, Realtor.com Monthly Housing Trends released 3 Augu
 
 First outright annual decline after 26 consecutive months of increases. Monthly path: Feb 70, Mar 57, Apr 52, May 52, Jun 53, Jul 57.
 
-Month over month the market is slowing. Year over year it is one day faster. **Seasonal slowing is not deterioration** — homes always take longer as summer ends, which is why every pattern signal is framed year over year.
+Month over month the market is slowing. Year over year it is one day faster. **Seasonal slowing is not deterioration**, homes always take longer as summer ends, which is why every pattern signal is framed year over year.
 
 Three ways it misleads: it only describes homes that sold; relistings restart the clock; publishers define it differently, so compare a market to itself over time.
 
@@ -91,7 +93,7 @@ National figures hide everything: Midwest inventory +9.3%, Northeast +8.3%, Sout
 
 ### 3.3 Price reduction share: 20.0%, versus 20.6% a year ago
 
-**The headline and the number disagree.** Coverage led with sellers cutting prices as summer cools, which is true month over month. The share of listings with a cut is *lower* than last July. Fewer sellers are cutting now.
+**The headline and the number disagree.** Coverage led with sellers cutting prices as summer cools, which is true month over month. The share of listings with a cut is **lower** than last July. Fewer sellers are cutting now.
 
 Read with days on market:
 

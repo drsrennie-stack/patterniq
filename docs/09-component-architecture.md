@@ -29,7 +29,7 @@ Two themes ship in one stylesheet, driven entirely by CSS custom properties on `
 
 ### Terminal (default)
 
-The professional trading-desk read. Dark ground, dense rows, monospace numerics, green and red deltas.
+The professional trading-desk read. Dark ground, dense rows, tabular numerals, green and red deltas.
 
 | Token | Value | Use |
 |---|---|---|
@@ -68,10 +68,13 @@ Both theme token sets were contrast-tested independently. Every text pair clears
 
 ### Type
 
-- **IBM Plex Mono** for every numeral, ticker entry, axis label, threshold, and code-like value. Tabular figures are the point: columns of numbers have to align on the decimal or a dense table becomes unreadable.
-- **Plus Jakarta Sans** for headings and prose.
-- **DM Sans** for small caps labels and panel headers.
-- No italics anywhere, per your standing rule. Emphasis uses weight, color, and case.
+**Plus Jakarta Sans, everywhere.** One typeface for headings, prose, numerals, labels, ticker entries, axis labels, and code-like values. No monospace face anywhere in the product.
+
+Numeric alignment is handled by OpenType features rather than by a second typeface: `font-variant-numeric: tabular-nums` plus `font-feature-settings: "tnum" 1, "lnum" 1`, applied globally including to SVG text. Columns of figures still align on the decimal in dense tables, which was the only real job the monospace face was doing.
+
+Hierarchy comes from weight, size, letter-spacing and case rather than from typeface switching. Small caps labels use 700 weight with wide letter-spacing at 10 to 11 px; numerals use 600 at large sizes; prose sits at 400.
+
+No italics anywhere, per your standing rule. A defensive `em, i, cite, address, var { font-style: normal }` rule is in the stylesheet so that no future markup can reintroduce them. Emphasis uses weight, color, and case.
 
 ### Non-color encoding is mandatory
 

@@ -6,13 +6,13 @@
 <title>PatternIQ Wireframes, Step 9</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* ===================== THEME TOKENS ===================== */
 :root{
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --mono:"Plus Jakarta Sans",system-ui,sans-serif;
   --sans:"Plus Jakarta Sans",system-ui,sans-serif;
-  --label:"DM Sans",system-ui,sans-serif;
+  --label:"Plus Jakarta Sans",system-ui,sans-serif;
 }
 /* Terminal (default) */
 [data-theme="terminal"]{
@@ -36,7 +36,10 @@
 }
 
 *{box-sizing:border-box}
-html,body{margin:0;padding:0}
+/* One typeface everywhere: Plus Jakarta Sans. Tabular figures keep numeric columns aligned. */
+body,button,input,select,textarea,svg text{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1,"lnum" 1}
+
+html,body{margin:0;padding:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif}
 body{
   background:var(--bg); color:var(--text);
   font-family:var(--sans); font-size:14px; line-height:1.5;
@@ -139,7 +142,7 @@ h4{font-size:13px;font-weight:700;margin:0 0 6px}
 @media (max-width:1100px){.g3,.g4,.g5,.g-2-1,.g-3-2,.g2{grid-template-columns:1fr}}
 
 /* ===================== NUMBERS ===================== */
-.num,td.n,th.n{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.num,td.n,th.n{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1,"lnum" 1}
 .big{font-family:var(--mono);font-size:34px;font-weight:600;line-height:1;letter-spacing:-.02em}
 .mid{font-family:var(--mono);font-size:20px;font-weight:600;line-height:1.1}
 .lab{font-family:var(--label);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700;margin:0 0 4px}
@@ -1089,7 +1092,7 @@ td.hm.n2{background:rgba(255,128,128,.18)}
       });
       [['25',0],['45',4],['65',8],['85',11]].forEach(function(t){
         var tx = el('text',{ x:(pad+t[1]*bw+bw/2).toFixed(1), y:h-7, 'text-anchor':'middle',
-          fill:css('--faint'), 'font-size':'9', 'font-family':'IBM Plex Mono, monospace' });
+          fill:css('--faint'), 'font-size':'9', 'font-family':'"Plus Jakarta Sans",system-ui,sans-serif' });
         tx.textContent = t[0]; svg.appendChild(tx);
       });
       box.appendChild(svg);
@@ -1122,7 +1125,7 @@ td.hm.n2{background:rgba(255,128,128,.18)}
     for(var g=0; g<=4; g++){
       var y = padT + priceH*g/4;
       svg.appendChild(el('line',{x1:padL,y1:y,x2:w-padR,y2:y,stroke:css('--grid'),'stroke-width':1}));
-      var lbl = el('text',{x:padL-6,y:y+3,'text-anchor':'end',fill:css('--faint'),'font-size':'9','font-family':'IBM Plex Mono, monospace'});
+      var lbl = el('text',{x:padL-6,y:y+3,'text-anchor':'end',fill:css('--faint'),'font-size':'9','font-family':'"Plus Jakarta Sans",system-ui,sans-serif'});
       lbl.textContent = (max - rng*g/4).toFixed(0); svg.appendChild(lbl);
     }
     var cw = (w-padL-padR)/n;
@@ -1140,7 +1143,7 @@ td.hm.n2{background:rgba(255,128,128,.18)}
       svg.appendChild(el('rect',{x:(x-cw*0.28).toFixed(1),y:(padT+priceH+gap+volH-vh).toFixed(1),
         width:(cw*0.56).toFixed(1),height:vh.toFixed(1), fill:col, opacity:.28}));
     });
-    var vl = el('text',{x:padL,y:padT+priceH+gap+volH+13,fill:css('--faint'),'font-size':'9','font-family':'IBM Plex Mono, monospace'});
+    var vl = el('text',{x:padL,y:padT+priceH+gap+volH+13,fill:css('--faint'),'font-size':'9','font-family':'"Plus Jakarta Sans",system-ui,sans-serif'});
     vl.textContent = 'REPEAT-SALE PAIRS PER QUARTER'; svg.appendChild(vl);
     box.appendChild(svg);
   }
@@ -1155,7 +1158,7 @@ td.hm.n2{background:rgba(255,128,128,.18)}
     svg.appendChild(el('rect',{x:(padL+(w-padL-padR)*0.62).toFixed(1),y:padT,
       width:((w-padL-padR)*0.16).toFixed(1),height:(h-padT-padB).toFixed(1),
       fill:css('--panel-2'),opacity:.9}));
-    var st = el('text',{x:(padL+(w-padL-padR)*0.63).toFixed(1),y:padT+12,fill:css('--faint'),'font-size':'9','font-family':'IBM Plex Mono, monospace'});
+    var st = el('text',{x:(padL+(w-padL-padR)*0.63).toFixed(1),y:padT+12,fill:css('--faint'),'font-size':'9','font-family':'"Plus Jakarta Sans",system-ui,sans-serif'});
     st.textContent='LOW CONFIDENCE'; svg.appendChild(st);
     for(var g=0;g<=4;g++){
       var y=padT+(h-padT-padB)*g/4;
@@ -1178,7 +1181,7 @@ td.hm.n2{background:rgba(255,128,128,.18)}
     ['MAR 24','SEP 24','MAR 25','SEP 25','MAR 26'].forEach(function(t,i){
       var tx = el('text',{x:(padL+i*(w-padL-padR)/4).toFixed(1),y:h-7,
         'text-anchor': i===0?'start':(i===4?'end':'middle'),
-        fill:css('--faint'),'font-size':'9','font-family':'IBM Plex Mono, monospace'});
+        fill:css('--faint'),'font-size':'9','font-family':'"Plus Jakarta Sans",system-ui,sans-serif'});
       tx.textContent=t; svg.appendChild(tx);
     });
     box.appendChild(svg);
@@ -1200,16 +1203,16 @@ td.hm.n2{background:rgba(255,128,128,.18)}
     var svg = el('svg',{viewBox:'0 0 '+w+' '+h,role:'img',
       'aria-label':'Placeholder signal persistence grid, twelve months across five signals'});
     rows.forEach(function(r,ri){
-      var t = el('text',{x:0,y:padT+ri*(ch+3)+12,fill:css('--dim'),'font-size':'9.5','font-family':'IBM Plex Mono, monospace'});
+      var t = el('text',{x:0,y:padT+ri*(ch+3)+12,fill:css('--dim'),'font-size':'9.5','font-family':'"Plus Jakarta Sans",system-ui,sans-serif'});
       t.textContent=r.label; svg.appendChild(t);
       r.cells.forEach(function(c,ci){
         svg.appendChild(el('rect',{x:padL+ci*(cw+1),y:padT+ri*(ch+3),width:cw,height:ch,
           fill: c ? css('--up') : css('--grid'), opacity: c ? .8 : 1, rx:1}));
       });
     });
-    var lt = el('text',{x:padL,y:h-4,fill:css('--faint'),'font-size':'9','font-family':'IBM Plex Mono, monospace'});
+    var lt = el('text',{x:padL,y:h-4,fill:css('--faint'),'font-size':'9','font-family':'"Plus Jakarta Sans",system-ui,sans-serif'});
     lt.textContent='APR 25'; svg.appendChild(lt);
-    var rt = el('text',{x:padL+11*(cw+1)+cw,y:h-4,'text-anchor':'end',fill:css('--faint'),'font-size':'9','font-family':'IBM Plex Mono, monospace'});
+    var rt = el('text',{x:padL+11*(cw+1)+cw,y:h-4,'text-anchor':'end',fill:css('--faint'),'font-size':'9','font-family':'"Plus Jakarta Sans",system-ui,sans-serif'});
     rt.textContent='MAR 26'; svg.appendChild(rt);
     box.appendChild(svg);
   }
@@ -1234,9 +1237,9 @@ td.hm.n2{background:rgba(255,128,128,.18)}
     svg.appendChild(el('polyline',{points:pts.slice(half).join(' '),fill:'none',stroke:css('--up'),'stroke-width':1.8}));
     var bx = padL + half*(w-padL-padR)/(n-1);
     svg.appendChild(el('circle',{cx:bx.toFixed(1),cy:zero.toFixed(1),r:3.2,fill:css('--gold')}));
-    var bt = el('text',{x:(bx+7).toFixed(1),y:(zero-7).toFixed(1),fill:css('--gold'),'font-size':'9.5','font-family':'IBM Plex Mono, monospace'});
+    var bt = el('text',{x:(bx+7).toFixed(1),y:(zero-7).toFixed(1),fill:css('--gold'),'font-size':'9.5','font-family':'"Plus Jakarta Sans",system-ui,sans-serif'});
     bt.textContent='BE 326,580'; svg.appendChild(bt);
-    var zl = el('text',{x:padL-6,y:zero+3,'text-anchor':'end',fill:css('--faint'),'font-size':'9','font-family':'IBM Plex Mono, monospace'});
+    var zl = el('text',{x:padL-6,y:zero+3,'text-anchor':'end',fill:css('--faint'),'font-size':'9','font-family':'"Plus Jakarta Sans",system-ui,sans-serif'});
     zl.textContent='0'; svg.appendChild(zl);
     box.appendChild(svg);
   }
@@ -1252,7 +1255,7 @@ td.hm.n2{background:rgba(255,128,128,.18)}
       'aria-label':'Placeholder chart of current days on market against each market five year range'});
     rows.forEach(function(r,i){
       var y = 16 + i*rowH;
-      var t = el('text',{x:padL,y:y-3,fill:css('--dim'),'font-size':'9.5','font-family':'IBM Plex Mono, monospace'});
+      var t = el('text',{x:padL,y:y-3,fill:css('--dim'),'font-size':'9.5','font-family':'"Plus Jakarta Sans",system-ui,sans-serif'});
       t.textContent = r.l; svg.appendChild(t);
       svg.appendChild(el('rect',{x:padL,y:y+2,width:w-padL*2,height:8,fill:css('--grid'),rx:1}));
       svg.appendChild(el('rect',{x:padL+(r.lo/100)*(w-padL*2),y:y+2,
@@ -1275,14 +1278,14 @@ td.hm.n2{background:rgba(255,128,128,.18)}
     }
     svg.appendChild(el('line',{x1:padL,y1:zero,x2:w-padR,y2:zero,stroke:css('--faint'),'stroke-width':1}));
     [['+0.2',padT+4],['0',zero+3],['-0.2',h-padB-1]].forEach(function(t){
-      var tx=el('text',{x:padL-6,y:t[1],'text-anchor':'end',fill:css('--faint'),'font-size':'9','font-family':'IBM Plex Mono, monospace'});
+      var tx=el('text',{x:padL-6,y:t[1],'text-anchor':'end',fill:css('--faint'),'font-size':'9','font-family':'"Plus Jakarta Sans",system-ui,sans-serif'});
       tx.textContent=t[0]; svg.appendChild(tx);
     });
     var m = el('text',{x:(padL+(w-padL-padR)/2).toFixed(1),y:zero-14,'text-anchor':'middle',
-      fill:css('--faint'),'font-size':'11','font-family':'IBM Plex Mono, monospace'});
+      fill:css('--faint'),'font-size':'11','font-family':'"Plus Jakarta Sans",system-ui,sans-serif'});
     m.textContent='NO DATA'; svg.appendChild(m);
     var m2 = el('text',{x:(padL+(w-padL-padR)/2).toFixed(1),y:zero+18,'text-anchor':'middle',
-      fill:css('--faint'),'font-size':'9','font-family':'IBM Plex Mono, monospace'});
+      fill:css('--faint'),'font-size':'9','font-family':'"Plus Jakarta Sans",system-ui,sans-serif'});
     m2.textContent='BACKTEST HARNESS SHIPS AT MILESTONE M15'; svg.appendChild(m2);
     box.appendChild(svg);
   }
