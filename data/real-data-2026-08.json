@@ -1,0 +1,154 @@
+{
+  "_readme": "Real, published US housing and economic data as of August 11, 2026. Every figure was retrieved from the publisher named in its `source` field and, where a second independent source was available, cross-checked. This file is the sample dataset used by the PatternIQ tutorial. Nothing in it is simulated. Figures that are illustrative rather than observed are NOT in this file.",
+  "compiled_at": "2026-08-11",
+  "compiled_by": "Dr. Sharilyn Rennie",
+  "geography": "United States, national. National figures are context only. PatternIQ scores counties and CBSAs, not the nation.",
+
+  "realtor_com_july_2026": {
+    "source": "Realtor.com Monthly Housing Trends Report",
+    "reference_month": "2026-07",
+    "release_date": "2026-08-03",
+    "license_class": "UNVERIFIED",
+    "license_note": "Realtor.com research files are published free with no authentication. Terms permitting storage in a private analytics database were not confirmable. Treated as Tier B throughout PatternIQ.",
+    "cross_checked_against": [
+      "FRED series ACTLISCOUUS, MEDLISPRIUS, NEWLISCOUUS (values match exactly)",
+      "Mortgage Professional America coverage dated 2026-08"
+    ],
+    "metrics": {
+      "median_list_price": { "value": 428950, "unit": "usd", "yoy_change_pct": -2.4, "mom_note": "flat versus June" },
+      "active_listings": { "value": 1126252, "unit": "count", "yoy_change_pct": 2.1 },
+      "new_listings": { "value": 423732, "unit": "count", "yoy_change_pct": 0.0 },
+      "median_days_on_market": { "value": 57, "unit": "days", "yoy_change_days": -1,
+        "note": "First outright annual decline after 26 consecutive months of year-over-year increases." },
+      "price_reduction_share": { "value": 20.0, "unit": "percent_of_active_listings", "prior_year_value": 20.6, "yoy_change_pp": -0.6 },
+      "median_price_per_sqft": { "value": 226, "unit": "usd", "yoy_change_pct": -2.0 },
+      "pending_sales": { "yoy_change_pct": 1.3, "unit": "percent",
+        "note": "Eighth consecutive month of year-over-year growth, the longest run since June 2021. Decelerating: May +4.1, June +3.7, July +1.3." }
+    },
+    "regional_median_list_price_yoy_pct": { "west": -3.9, "south": -2.5, "northeast": -1.4, "midwest": 0.2 },
+    "regional_active_inventory_yoy_pct": { "midwest": 9.3, "northeast": 8.3, "south": -0.2 }
+  },
+
+  "fred_monthly_history": {
+    "source": "FRED, Federal Reserve Bank of St. Louis, mirroring Realtor.com Housing Inventory Core Metrics",
+    "license_note": "FRED terms are permissive but explicitly place responsibility for third-party copyrighted series on the user. These series are owned by Realtor.com, so pulling them through FRED does not change their license status.",
+    "retrieved": "2026-08-11",
+    "active_listing_count": {
+      "series_id": "ACTLISCOUUS", "last_updated": "2026-08-07",
+      "observations": [
+        { "period": "2026-03", "value": 947866 },
+        { "period": "2026-04", "value": 1002935 },
+        { "period": "2026-05", "value": 1058693 },
+        { "period": "2026-06", "value": 1102615 },
+        { "period": "2026-07", "value": 1126252 }
+      ]
+    },
+    "median_listing_price": {
+      "series_id": "MEDLISPRIUS", "last_updated": "2026-08-07",
+      "observations": [
+        { "period": "2026-03", "value": 416000 },
+        { "period": "2026-04", "value": 425000 },
+        { "period": "2026-05", "value": 429500 },
+        { "period": "2026-06", "value": 430000 },
+        { "period": "2026-07", "value": 428950 }
+      ]
+    },
+    "new_listing_count": {
+      "series_id": "NEWLISCOUUS", "last_updated": "2026-08-07",
+      "observations": [
+        { "period": "2026-03", "value": 438938 },
+        { "period": "2026-04", "value": 477116 },
+        { "period": "2026-05", "value": 474976 },
+        { "period": "2026-06", "value": 463480 },
+        { "period": "2026-07", "value": 423732 }
+      ]
+    },
+    "median_days_on_market": {
+      "series_id": "MEDDAYONMARUS",
+      "note": "FRED page read on 2026-08-11 showed June as the latest observation. The July value of 57 comes from the Realtor.com July report itself, which is the upstream publisher.",
+      "observations": [
+        { "period": "2026-02", "value": 70 },
+        { "period": "2026-03", "value": 57 },
+        { "period": "2026-04", "value": 52 },
+        { "period": "2026-05", "value": 52 },
+        { "period": "2026-06", "value": 53 },
+        { "period": "2026-07", "value": 57, "source_override": "Realtor.com July 2026 report" }
+      ]
+    }
+  },
+
+  "freddie_mac_pmms": {
+    "source": "Freddie Mac Primary Mortgage Market Survey",
+    "release_date": "2026-08-06",
+    "geography": "national",
+    "license_class": "PERMISSIVE_ATTRIBUTION",
+    "license_note": "Permitted with proper attribution. Alteration of the published document is prohibited.",
+    "cross_checked_against": ["FRED series MORTGAGE30US, last updated 2026-08-06 11:02 CDT"],
+    "rate_30yr_fixed": { "current": 6.69, "prior_week": 6.66, "year_ago": 6.63 },
+    "rate_15yr_fixed": { "current": 6.01, "prior_week": 6.04, "year_ago": 5.75 },
+    "weekly_30yr_history": [
+      { "week_ending": "2026-07-09", "value": 6.49 },
+      { "week_ending": "2026-07-16", "value": 6.55 },
+      { "week_ending": "2026-07-23", "value": 6.58 },
+      { "week_ending": "2026-07-30", "value": 6.66 },
+      { "week_ending": "2026-08-06", "value": 6.69 }
+    ],
+    "note": "Five consecutive weekly increases. This is the only genuinely weekly series in the entire PatternIQ data plan."
+  },
+
+  "bls_employment_situation": {
+    "source": "US Bureau of Labor Statistics, Employment Situation",
+    "reference_month": "2026-07",
+    "release_date": "2026-08-07",
+    "license_class": "PUBLIC_DOMAIN",
+    "unemployment_rate_pct": 4.1,
+    "nonfarm_payroll_change": -23000,
+    "note": "BLS characterized both as little changed in July."
+  },
+
+  "census_new_residential_construction": {
+    "source": "US Census Bureau and HUD, New Residential Construction",
+    "reference_month": "2026-06",
+    "release_date": "2026-07-17",
+    "license_class": "PUBLIC_DOMAIN",
+    "units": "seasonally adjusted annual rate",
+    "building_permits": { "value": 1367000, "mom_change_pct": -3.0, "yoy_change_pct": -2.3 },
+    "housing_starts": { "value": 1427000, "mom_change_pct": 19.0, "yoy_change_pct": 3.5 },
+    "housing_completions": { "value": 1392000, "mom_change_pct": 3.3, "yoy_change_pct": 1.5 },
+    "note": "The starts figure carries a margin of error of plus or minus 15.9 percent, wider than the 19.0 percent change itself. Census states the change is not statistically significant."
+  },
+
+  "fhfa_house_price_index": {
+    "source": "Federal Housing Finance Agency House Price Index, purchase-only seasonally adjusted",
+    "license_class": "PUBLIC_DOMAIN",
+    "monthly": {
+      "reference_month": "2026-05",
+      "release_date": "2026-07-28",
+      "mom_change_pct": 0.3,
+      "yoy_change_pct": 2.2,
+      "division_mom_range": { "low": { "division": "Pacific", "value": -0.6 }, "high": { "division": "East South Central", "value": 1.4 } },
+      "division_yoy_range": { "low": { "division": "Pacific", "value": -0.3 }, "high": { "division": "Middle Atlantic", "value": 4.5 } }
+    },
+    "quarterly": {
+      "reference_quarter": "2026Q1",
+      "release_date": "2026-05-26",
+      "qoq_change_pct": 0.5,
+      "yoy_change_pct": 1.7
+    }
+  },
+
+  "publication_lag_summary": {
+    "_note": "Computed from the release dates above, as of 2026-08-11. This table is the point of the tutorial's chapter on lag.",
+    "rows": [
+      { "series": "Mortgage rate, 30-year fixed", "publisher": "Freddie Mac", "reference_period": "week ending 2026-08-06", "released": "2026-08-06", "lag_days": 0, "cadence": "weekly" },
+      { "series": "Unemployment rate", "publisher": "BLS", "reference_period": "2026-07", "released": "2026-08-07", "lag_days": 7, "cadence": "monthly" },
+      { "series": "Listing metrics (DOM, inventory, price cuts)", "publisher": "Realtor.com", "reference_period": "2026-07", "released": "2026-08-03", "lag_days": 3, "cadence": "monthly" },
+      { "series": "Building permits", "publisher": "Census", "reference_period": "2026-06", "released": "2026-07-17", "lag_days": 17, "cadence": "monthly" },
+      { "series": "House price index, monthly", "publisher": "FHFA", "reference_period": "2026-05", "released": "2026-07-28", "lag_days": 58, "cadence": "monthly" },
+      { "series": "House price index, quarterly", "publisher": "FHFA", "reference_period": "2026Q1", "released": "2026-05-26", "lag_days": 56, "cadence": "quarterly" },
+      { "series": "Employment and wages by county", "publisher": "BLS QCEW", "reference_period": "2025Q4 or 2026Q1", "released": "varies", "lag_days": 150, "cadence": "quarterly" },
+      { "series": "Median household income, property tax paid", "publisher": "Census ACS 5-year", "reference_period": "rolling 5-year window", "released": "annual", "lag_days": 365, "cadence": "annual" },
+      { "series": "Homeowners insurance premium", "publisher": "US Treasury FIO", "reference_period": "2018 to 2022", "released": "2025-01", "lag_days": 1320, "cadence": "one-off" }
+    ]
+  }
+}

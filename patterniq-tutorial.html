@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PatternIQ, How To Read It</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0E14; --panel:#111820; --panel-2:#18212C; --head:#1B2530;
+  --line:#232E3C; --grid:#1A2431;
+  --text:#D6E1EC; --dim:#9BAFC4; --faint:#7C90A4;
+  --up:#3DD68C; --down:#FF8080; --gold:#E0A93C;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:"Plus Jakarta Sans",system-ui,sans-serif;
+  --label:"DM Sans",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.skip{position:absolute;left:-9999px;top:0;background:var(--gold);color:#0A0E14;padding:10px 16px;z-index:999;font-weight:700}
+.skip:focus{left:8px;top:8px}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:2px}
+button{font-family:inherit;font-size:inherit;color:inherit}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* header */
+.topbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--panel);border-bottom:1px solid var(--line);padding:9px 16px;position:sticky;top:0;z-index:50}
+.mark{font-weight:800;font-size:16px;letter-spacing:-.01em}
+.mark span{font-family:var(--mono);font-size:11px;color:var(--faint);font-weight:400;margin-left:8px}
+.spacer{flex:1}
+.prog{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:11.5px;color:var(--dim)}
+.pbar{width:140px;height:6px;background:var(--grid);border-radius:3px;overflow:hidden}
+.pbar i{display:block;height:100%;background:var(--gold);width:0%;transition:width 250ms ease}
+
+/* shell */
+.shell{display:grid;grid-template-columns:266px 1fr}
+@media (max-width:960px){.shell{grid-template-columns:1fr}}
+nav.side{background:var(--panel);border-right:1px solid var(--line);padding:12px 0;max-height:calc(100vh - 46px);overflow:auto;position:sticky;top:46px}
+@media (max-width:960px){nav.side{position:static;max-height:none}}
+nav.side ol{list-style:none;margin:0;padding:0}
+.modhead{font-family:var(--label);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);padding:16px 16px 5px;font-weight:700}
+nav.side button{display:flex;gap:9px;width:100%;text-align:left;background:none;border:0;padding:6px 16px;cursor:pointer;font-size:13.2px;color:var(--dim);border-left:2px solid transparent;line-height:1.4}
+nav.side button:hover{background:var(--panel-2);color:var(--text)}
+nav.side button[aria-current="step"]{border-left-color:var(--gold);background:var(--head);color:var(--text);font-weight:700}
+nav.side button .no{font-family:var(--mono);font-size:11px;color:var(--faint);flex:0 0 26px}
+nav.side button.done .no::after{content:" ✓";color:var(--up)}
+main{padding:26px 30px 80px;max-width:920px}
+
+/* type */
+.eyebrow{font-family:var(--label);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:700;margin:0 0 6px}
+h1{font-size:29px;font-weight:800;margin:0 0 10px;letter-spacing:-.02em;line-height:1.2}
+h2{font-size:18px;font-weight:700;margin:28px 0 8px;letter-spacing:-.01em}
+h3{font-family:var(--label);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700;margin:22px 0 7px}
+p{margin:0 0 13px}
+main ul,main ol.body{margin:0 0 13px;padding-left:20px}
+main li{margin:5px 0}
+strong{color:#fff;font-weight:700}
+code{font-family:var(--mono);font-size:.88em;background:var(--panel-2);padding:1px 5px;border-radius:2px;color:var(--gold)}
+a{color:var(--s1)}
+
+/* panels */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:3px;margin:16px 0}
+.panel > .ph{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 13px;border-bottom:1px solid var(--line);background:var(--head);flex-wrap:wrap}
+.panel > .ph h4{margin:0;font-family:var(--label);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.panel > .pb{padding:14px}
+.grid{display:grid;gap:12px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media (max-width:820px){.g2,.g3,.g4{grid-template-columns:1fr}}
+
+/* badges */
+.badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--label);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding:2px 7px;border-radius:2px;border:1px solid;white-space:nowrap}
+.badge.real{border-color:var(--s3);color:var(--s3);background:rgba(25,158,112,.09)}
+.badge.illus{border-color:var(--gold);color:var(--gold);background:rgba(224,169,60,.09);border-style:dashed}
+.badge.unver{border-color:var(--down);color:var(--down)}
+.badge.pd{border-color:var(--dim);color:var(--dim)}
+
+/* stat tiles */
+.tile{background:var(--panel-2);border:1px solid var(--line);border-radius:3px;padding:12px}
+.tile .lab{font-family:var(--label);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:700;margin:0 0 5px;display:block}
+.tile .val{font-family:var(--mono);font-size:27px;font-weight:600;line-height:1.05;letter-spacing:-.02em;display:block}
+.tile .sub{font-family:var(--mono);font-size:11.5px;color:var(--dim);margin-top:5px;display:block}
+.up{color:var(--up)} .down{color:var(--down)} .flat{color:var(--faint)}
+
+/* tables */
+table{border-collapse:collapse;width:100%;font-size:13px;margin:6px 0}
+caption{text-align:left;font-size:11.5px;color:var(--faint);padding:0 0 7px}
+th,td{padding:6px 10px;border-bottom:1px solid var(--grid);text-align:left;vertical-align:top}
+thead th{background:var(--head);font-family:var(--label);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);font-weight:700}
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+tbody tr:hover{background:var(--panel-2)}
+
+/* callouts */
+.call{border:1px solid var(--line);border-left:3px solid var(--s1);background:var(--panel-2);padding:12px 14px;border-radius:2px;margin:16px 0;font-size:14px}
+.call.warn{border-left-color:var(--gold)}
+.call.stop{border-left-color:var(--down)}
+.call h4{margin:0 0 5px;font-size:14px}
+.call p:last-child{margin-bottom:0}
+
+/* charts */
+.chartwrap{background:var(--panel-2);border:1px solid var(--line);border-radius:3px;padding:12px;position:relative}
+.chartwrap svg{display:block;width:100%;overflow:visible}
+.ctitle{font-family:var(--label);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);font-weight:700;margin:0 0 2px}
+.csub{font-family:var(--mono);font-size:10.5px;color:var(--faint);margin:0 0 10px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:9px;font-family:var(--mono);font-size:11px;color:var(--dim)}
+.legend span{display:flex;align-items:center;gap:6px}
+.sw{width:14px;height:3px;border-radius:2px;display:inline-block}
+.tip{position:absolute;pointer-events:none;background:#0A0E14;border:1px solid var(--line);border-radius:3px;padding:6px 9px;font-family:var(--mono);font-size:11.5px;color:var(--text);opacity:0;transition:opacity 120ms;z-index:5;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.6)}
+.tblbtn{background:var(--panel);border:1px solid var(--line);color:var(--dim);padding:3px 9px;border-radius:2px;cursor:pointer;font-family:var(--label);font-size:10px;letter-spacing:.09em;text-transform:uppercase;font-weight:700}
+.tblbtn:hover{border-color:var(--gold);color:var(--text)}
+.dtable[hidden]{display:none}
+
+/* quiz */
+.quiz{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:3px;padding:16px;margin:24px 0}
+.quiz .qh{font-family:var(--label);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:700;margin:0 0 8px}
+.quiz .qq{font-weight:700;margin:0 0 12px;font-size:15px}
+.opts{display:flex;flex-direction:column;gap:7px}
+.opts button{text-align:left;background:var(--panel-2);border:1px solid var(--line);border-radius:3px;padding:9px 12px;cursor:pointer;font-size:14px;color:var(--text);line-height:1.45}
+.opts button:hover:not(:disabled){border-color:var(--gold)}
+.opts button:disabled{cursor:default;opacity:.72}
+.opts button.correct{border-color:var(--up);background:rgba(61,214,140,.10);opacity:1}
+.opts button.wrong{border-color:var(--down);background:rgba(255,128,128,.10);opacity:1}
+.opts button .flag{font-family:var(--mono);font-size:11px;margin-right:7px}
+.fb{margin-top:12px;padding:11px 13px;border-radius:2px;font-size:13.5px;background:var(--panel-2);border:1px solid var(--line);display:none}
+.fb.show{display:block}
+.fb.ok{border-left:3px solid var(--up)}
+.fb.no{border-left:3px solid var(--down)}
+.fb .verdict{font-weight:700;display:block;margin-bottom:4px}
+
+/* footer nav */
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px;padding-top:18px;border-top:1px solid var(--line)}
+.pager button{background:var(--panel);border:1px solid var(--line);color:var(--text);padding:9px 16px;border-radius:3px;cursor:pointer;font-size:13.5px}
+.pager button:hover:not(:disabled){border-color:var(--gold)}
+.pager button:disabled{opacity:.35;cursor:default}
+.pager button.next{background:var(--gold);color:#0A0E14;border-color:var(--gold);font-weight:700}
+.lesson[hidden]{display:none}
+em,i,cite,address,var{font-style:normal}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  nav.side,.topbar,.pager,.tblbtn{display:none}
+  body{background:#fff;color:#000}
+  .lesson[hidden]{display:block!important}
+  main{max-width:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+
+<div class="topbar">
+  <div class="mark">PatternIQ <span>HOW TO READ IT</span></div>
+  <div class="spacer"></div>
+  <div class="prog">
+    <span id="prog-text">Lesson 1 of 23</span>
+    <span class="pbar" role="img" aria-label="Course progress"><i id="pbar-fill"></i></span>
+    <span id="score-text">0 / 0 correct</span>
+  </div>
+</div>
+
+<div class="shell">
+  <nav class="side" aria-label="Course contents"><div id="toc"></div></nav>
+  <main id="main" tabindex="-1">
+    <div aria-live="polite" class="sr" id="announce"></div>
+    <div id="lessons"></div>
+    <div class="pager">
+      <button type="button" id="prev">← Previous</button>
+      <button type="button" id="next" class="next">Next →</button>
+    </div>
+  </main>
+</div>
+
+<script>
+"use strict";
+/* ============================================================
+   REAL DATA. Every value below was retrieved from the named
+   publisher on 2026-08-11 and cross-checked where a second
+   independent source existed. See docs/11-sample-data-provenance.md
+   ============================================================ */
+const D = {
+  pmms: {
+    src:"Freddie Mac PMMS", released:"2026-08-06",
+    weeks:[["Jul 9",6.49],["Jul 16",6.55],["Jul 23",6.58],["Jul 30",6.66],["Aug 6",6.69]],
+    r30:6.69, r30prior:6.66, r30yr:6.63, r15:6.01, r15prior:6.04, r15yr:5.75
+  },
+  rdc: {
+    src:"Realtor.com Monthly Housing Trends", released:"2026-08-03", ref:"July 2026",
+    listPrice:428950, listPriceYoY:-2.4,
+    active:1126252, activeYoY:2.1,
+    newList:423732, newListYoY:0.0,
+    dom:57, domYoYdays:-1,
+    cuts:20.0, cutsPrior:20.6, cutsYoYpp:-0.6,
+    ppsf:226, ppsfYoY:-2.0,
+    pendingYoY:1.3, pendingMay:4.1, pendingJun:3.7,
+    regionPrice:[["West",-3.9],["South",-2.5],["Northeast",-1.4],["Midwest",0.2]],
+    regionInv:[["Midwest",9.3],["Northeast",8.3],["South",-0.2]]
+  },
+  hist: {
+    active:[["Mar",947866],["Apr",1002935],["May",1058693],["Jun",1102615],["Jul",1126252]],
+    newList:[["Mar",438938],["Apr",477116],["May",474976],["Jun",463480],["Jul",423732]],
+    listPrice:[["Mar",416000],["Apr",425000],["May",429500],["Jun",430000],["Jul",428950]],
+    dom:[["Feb",70],["Mar",57],["Apr",52],["May",52],["Jun",53],["Jul",57]]
+  },
+  bls:{ src:"BLS Employment Situation", released:"2026-08-07", ref:"July 2026", unemp:4.1, payrolls:-23000 },
+  census:{ src:"Census and HUD New Residential Construction", released:"2026-07-17", ref:"June 2026",
+    permits:1367000, permitsMoM:-3.0, permitsYoY:-2.3,
+    starts:1427000, startsMoM:19.0, startsMoE:15.9, startsYoY:3.5,
+    completions:1392000, completionsMoM:3.3, completionsYoY:1.5 },
+  fhfa:{ src:"FHFA House Price Index", releasedM:"2026-07-28", refM:"May 2026", mom:0.3, yoy:2.2,
+    releasedQ:"2026-05-26", refQ:"Q1 2026", qoq:0.5, yoyQ:1.7 },
+  lag:[
+    ["Mortgage rate, 30-year","Freddie Mac","wk ending Aug 6",0],
+    ["Listing metrics","Realtor.com","July",3],
+    ["Unemployment rate","BLS","July",7],
+    ["Building permits","Census","June",17],
+    ["House price index","FHFA","May",58],
+    ["County employment and wages","BLS QCEW","Q1",150],
+    ["Income, property tax","Census ACS","5-yr window",365],
+    ["Insurance premium","Treasury FIO","2018-2022",1320]
+  ]
+};
+
+/* ============================================================
+   CHART HELPERS
+   Palette validated with the dataviz skill's checker against
+   surface #111820: lightness band, chroma floor, CVD separation,
+   normal-vision floor, contrast. All pass.
+   Status colors (up green / down red) are reserved and never
+   used as a series color.
+   ============================================================ */
+const NS="http://www.w3.org/2000/svg";
+function E(n,a){const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e;}
+function fmt(n){return n>=10000?n.toLocaleString("en-US"):String(n);}
+
+let chartSeq=0;
+function lineChart(o){
+  const id="ch"+(++chartSeq);
+  const w=680,h=o.h||210,pl=o.pl||52,pr=18,pt=12,pb=30;
+  const svg=E("svg",{viewBox:`0 0 ${w} ${h}`,role:"img","aria-label":o.alt});
+  const all=o.series.flatMap(s=>s.data.map(d=>d[1]));
+  let min=o.min!==undefined?o.min:Math.min(...all), max=o.max!==undefined?o.max:Math.max(...all);
+  const padv=(max-min)*0.15||1; if(o.min===undefined)min-=padv; if(o.max===undefined)max+=padv;
+  const rng=max-min||1, n=o.series[0].data.length;
+  const X=i=>pl+i*(w-pl-pr)/(n-1), Y=v=>pt+(max-v)/rng*(h-pt-pb);
+  for(let g=0;g<=4;g++){const y=pt+(h-pt-pb)*g/4;
+    svg.appendChild(E("line",{x1:pl,y1:y,x2:w-pr,y2:y,stroke:"#1A2431","stroke-width":1}));
+    const t=E("text",{x:pl-8,y:y+3.5,"text-anchor":"end",fill:"#7C90A4","font-size":"10","font-family":"IBM Plex Mono, monospace"});
+    t.textContent=o.fmtY?o.fmtY(max-rng*g/4):(max-rng*g/4).toFixed(o.dec||0); svg.appendChild(t);}
+  o.series[0].data.forEach((d,i)=>{const t=E("text",{x:X(i),y:h-9,"text-anchor":"middle",fill:"#7C90A4","font-size":"10","font-family":"IBM Plex Mono, monospace"});t.textContent=d[0];svg.appendChild(t);});
+  o.series.forEach(s=>{
+    svg.appendChild(E("polyline",{points:s.data.map((d,i)=>X(i)+","+Y(d[1])).join(" "),fill:"none",stroke:s.color,"stroke-width":2,"stroke-linejoin":"round","stroke-linecap":"round"}));
+    s.data.forEach((d,i)=>{svg.appendChild(E("circle",{cx:X(i),cy:Y(d[1]),r:4,fill:s.color,stroke:"#18212C","stroke-width":2}));});
+    const last=s.data[s.data.length-1];
+    const lt=E("text",{x:X(n-1)+8,y:Y(last[1])+4,fill:s.color,"font-size":"11","font-family":"IBM Plex Mono, monospace","font-weight":"600"});
+    lt.textContent=o.fmtLabel?o.fmtLabel(last[1]):last[1]; svg.appendChild(lt);
+  });
+  const hot=E("g",{}); svg.appendChild(hot);
+  const wrap=document.createElement("div"); wrap.className="chartwrap";
+  if(o.title){const t=document.createElement("p");t.className="ctitle";t.textContent=o.title;wrap.appendChild(t);}
+  if(o.sub){const s=document.createElement("p");s.className="csub";s.textContent=o.sub;wrap.appendChild(s);}
+  wrap.appendChild(svg);
+  const tip=document.createElement("div"); tip.className="tip"; wrap.appendChild(tip);
+  for(let i=0;i<n;i++){
+    const r=E("rect",{x:X(i)-(w-pl-pr)/(n-1)/2,y:pt,width:(w-pl-pr)/(n-1),height:h-pt-pb,fill:"transparent"});
+    r.addEventListener("mouseenter",()=>{
+      tip.style.opacity=1;
+      tip.innerHTML=o.series[0].data[i][0]+"<br>"+o.series.map(s=>`<span style="color:${s.color}">■</span> ${s.name}: ${o.fmtLabel?o.fmtLabel(s.data[i][1]):s.data[i][1]}`).join("<br>");
+      const pct=X(i)/w; tip.style.left=Math.max(4,Math.min(pct*wrap.clientWidth-40,wrap.clientWidth-140))+"px"; tip.style.top="26px";
+    });
+    r.addEventListener("mouseleave",()=>{tip.style.opacity=0;});
+    hot.appendChild(r);
+  }
+  if(o.series.length>1){
+    const lg=document.createElement("div"); lg.className="legend";
+    o.series.forEach(s=>{lg.innerHTML+=`<span><i class="sw" style="background:${s.color}"></i>${s.name}</span>`;});
+    wrap.appendChild(lg);
+  }
+  // table view
+  const btnRow=document.createElement("div"); btnRow.style.marginTop="9px";
+  const btn=document.createElement("button"); btn.className="tblbtn"; btn.type="button"; btn.textContent="View as table";
+  btn.setAttribute("aria-expanded","false"); btnRow.appendChild(btn); wrap.appendChild(btnRow);
+  const tbl=document.createElement("div"); tbl.className="dtable"; tbl.hidden=true;
+  let html='<table><caption>'+(o.title||"Chart data")+'</caption><thead><tr><th scope="col">Period</th>'+o.series.map(s=>`<th scope="col" class="n">${s.name}</th>`).join("")+'</tr></thead><tbody>';
+  o.series[0].data.forEach((d,i)=>{html+=`<tr><th scope="row">${d[0]}</th>`+o.series.map(s=>`<td class="n">${o.fmtLabel?o.fmtLabel(s.data[i][1]):s.data[i][1]}</td>`).join("")+"</tr>";});
+  tbl.innerHTML=html+"</tbody></table>"; wrap.appendChild(tbl);
+  btn.addEventListener("click",()=>{const open=!tbl.hidden;tbl.hidden=open;btn.setAttribute("aria-expanded",String(!open));btn.textContent=open?"View as table":"Hide table";});
+  return wrap;
+}
+
+function barChart(o){
+  const rows=o.data, rowH=o.rowH||26, w=680, pl=o.pl||186, pr=54, pt=6;
+  const h=pt+rows.length*rowH+8;
+  const svg=E("svg",{viewBox:`0 0 ${w} ${h}`,role:"img","aria-label":o.alt});
+  const vals=rows.map(r=>r[1]);
+  const max=Math.max(...vals.map(Math.abs))||1;
+  const hasNeg=vals.some(v=>v<0);
+  const zx=hasNeg?pl+(w-pl-pr)*0.34:pl;
+  const scale=hasNeg?(w-pl-pr)*0.62/max:(w-pl-pr)/max;
+  rows.forEach((r,i)=>{
+    const y=pt+i*rowH;
+    const t=E("text",{x:pl-10,y:y+rowH/2+4,"text-anchor":"end",fill:"#9BAFC4","font-size":"11.5","font-family":"IBM Plex Mono, monospace"});
+    t.textContent=r[0]; svg.appendChild(t);
+    const v=r[1], bw=Math.abs(v)*scale;
+    const col=o.color||(v<0?"#d95926":"#3987e5");
+    svg.appendChild(E("rect",{x:v<0?zx-bw:zx,y:y+4,width:Math.max(bw,1.5),height:rowH-12,fill:col,rx:2}));
+    const vt=E("text",{x:(v<0?zx-bw-7:zx+bw+7),y:y+rowH/2+4,"text-anchor":v<0?"end":"start",fill:"#D6E1EC","font-size":"11.5","font-family":"IBM Plex Mono, monospace","font-weight":"600"});
+    vt.textContent=o.fmtV?o.fmtV(v):v; svg.appendChild(vt);
+  });
+  if(hasNeg) svg.appendChild(E("line",{x1:zx,y1:pt,x2:zx,y2:h-6,stroke:"#7C90A4","stroke-width":1}));
+  const wrap=document.createElement("div"); wrap.className="chartwrap";
+  if(o.title){const t=document.createElement("p");t.className="ctitle";t.textContent=o.title;wrap.appendChild(t);}
+  if(o.sub){const s=document.createElement("p");s.className="csub";s.textContent=o.sub;wrap.appendChild(s);}
+  wrap.appendChild(svg);
+  const btnRow=document.createElement("div"); btnRow.style.marginTop="9px";
+  const btn=document.createElement("button"); btn.className="tblbtn"; btn.type="button"; btn.textContent="View as table"; btn.setAttribute("aria-expanded","false");
+  btnRow.appendChild(btn); wrap.appendChild(btnRow);
+  const tbl=document.createElement("div"); tbl.className="dtable"; tbl.hidden=true;
+  tbl.innerHTML='<table><caption>'+(o.title||"Chart data")+'</caption><thead><tr><th scope="col">Item</th><th scope="col" class="n">Value</th></tr></thead><tbody>'+
+    rows.map(r=>`<tr><th scope="row">${r[0]}</th><td class="n">${o.fmtV?o.fmtV(r[1]):r[1]}</td></tr>`).join("")+"</tbody></table>";
+  wrap.appendChild(tbl);
+  btn.addEventListener("click",()=>{const open=!tbl.hidden;tbl.hidden=open;btn.setAttribute("aria-expanded",String(!open));btn.textContent=open?"View as table":"Hide table";});
+  return wrap;
+}
+
+function tile(label,val,sub,cls){
+  return `<div class="tile"><span class="lab">${label}</span><span class="val ${cls||""}">${val}</span><span class="sub">${sub||""}</span></div>`;
+}
+const REAL = `<span class="badge real">Real data</span>`;
+const ILLUS = `<span class="badge illus">Illustrative</span>`;
+
+/* ============================================================
+   CURRICULUM
+   ============================================================ */
+const MODULES=[
+ {name:"1 · Orientation", lessons:[
+  {t:"What PatternIQ is, and four things it will not do",
+   html:`
+<p>PatternIQ is a research instrument. It reads public housing and economic data, organises it into a picture of a local market, tells you how strong the evidence behind that picture is, and teaches you to read it yourself.</p>
+<p>It is not a recommendation engine. That distinction is not modesty, it is architecture. Four refusals are built into the product and you should hold it to them.</p>
+<div class="call"><h4>The four refusals</h4>
+<ol class="body">
+<li><strong>It will not give you a number when the evidence is thin.</strong> Markets that fail a publication gate show as withheld, with the gate named, rather than getting a plausible-looking score.</li>
+<li><strong>It will not tell you what usually happens next until it has checked.</strong> A pattern that has not been backtested says so, and its confidence is capped low enough that you cannot lean on it.</li>
+<li><strong>It will not blur a fact into a prediction.</strong> Every claim is typed: fact, inference, pattern, or prediction. They are displayed differently and never mixed.</li>
+<li><strong>It will not hide what it cannot see.</strong> There is no free national foreclosure data. Every market in the country carries a permanent confidence penalty for that, stated on screen.</li>
+</ol></div>
+<p>The reason to start here is that the rest of this course is mostly about uncertainty, and that will feel like pessimism unless you understand what it buys you. A tool that says "62.4" about every market in America is easy to build and impossible to trust. A tool that scores 1,847 markets, withholds 2,214, and tells you exactly why, is the harder thing and the useful one.</p>
+`,
+   q:{q:"A market shows an Opportunity Score of 78 with a Confidence of 34. What does PatternIQ actually do with it?",
+      opts:["Shows the 78 prominently, since it is a strong score","Withholds the score and names the gate it failed","Averages the two into a blended 56","Shows the 78 with a small warning icon"],
+      a:1, fb:"Confidence below 40 fails gate G3, so the Opportunity Score is not published at all. The market appears with a stated reason instead of a number. Blending the two would destroy the distinction the whole design rests on, and a small warning icon next to a big number is how people end up trusting the number."}},
+
+  {t:"The sentence the whole product runs on",
+   html:`
+<div class="call"><p style="font-size:16px;margin:0"><strong>Show the evidence. Explain the pattern. Quantify uncertainty. Teach the investor. Track the outcome. Learn from the outcome.</strong></p></div>
+<p>Read that as six obligations, each of which cashes out into something you can check on screen.</p>
+<table><caption>What each obligation looks like in the interface</caption>
+<thead><tr><th scope="col">Obligation</th><th scope="col">Where you see it</th></tr></thead>
+<tbody>
+<tr><td><strong>Show the evidence</strong></td><td>Every number has a provenance affordance: source, geography level, observation date, retrieval date, vintage, licence status.</td></tr>
+<tr><td><strong>Explain the pattern</strong></td><td>Patterns list which signals fired, which did not, how long they have persisted, and what would invalidate them.</td></tr>
+<tr><td><strong>Quantify uncertainty</strong></td><td>A Confidence Score with seven visible components sits beside every Opportunity Score at equal weight.</td></tr>
+<tr><td><strong>Teach the investor</strong></td><td>Every metric carries a ten-part explanation, including the common ways it is misread.</td></tr>
+<tr><td><strong>Track the outcome</strong></td><td>The decision journal records what was on screen when you decided, and what you decided.</td></tr>
+<tr><td><strong>Learn from the outcome</strong></td><td>Your completed projects become the only data in the system that measures what you actually care about.</td></tr>
+</tbody></table>
+<p>The last two are the ones people skip, and they are the ones that compound. A market score is a guess about the world. A record of your own last eleven projects is a fact about you.</p>
+`,
+   q:{q:"Which of the six obligations is the only one that produces data nobody else in the world has?",
+      opts:["Show the evidence","Quantify uncertainty","Learn from the outcome","Explain the pattern"],
+      a:2, fb:"Public data is public. Anyone can compute an inventory trend. Your own planned-versus-actual record across completed projects is proprietary, it measures profit rather than a proxy for profit, and it is the input to every personalised estimate the system will eventually make."}},
+
+  {t:"Opportunity and Confidence are two different questions",
+   html:`
+<p>This is the single most important idea in the product, and the one most likely to be collapsed by a hurried reader.</p>
+<ul>
+<li><strong>Opportunity</strong> answers: given what we can see, how favourable does this market look relative to comparable markets?</li>
+<li><strong>Confidence</strong> answers: how much of the picture are we actually seeing, and how good is it?</li>
+</ul>
+<p>They are computed independently and never blended. Four combinations, four different actions.</p>
+<div class="grid g2">
+<div class="tile"><span class="lab">High opportunity · High confidence</span><span class="val" style="font-size:17px">Investigate properly</span><span class="sub">The evidence is strong and it points somewhere. This is the rare one.</span></div>
+<div class="tile"><span class="lab">High opportunity · Low confidence</span><span class="val" style="font-size:17px">The trap</span><span class="sub">Looks exciting because you are seeing a fraction of the picture. Thin data produces extreme scores.</span></div>
+<div class="tile"><span class="lab">Moderate opportunity · High confidence</span><span class="val" style="font-size:17px">Often the better market</span><span class="sub">Unexciting and solid. Most durable money is made here.</span></div>
+<div class="tile"><span class="lab">Low opportunity · Low confidence</span><span class="val" style="font-size:17px">Ignore</span><span class="sub">Nothing to see and no ability to see it.</span></div>
+</div>
+<div class="call warn"><h4>Why thin data produces extreme scores</h4>
+<p>Opportunity is a percentile rank within a peer set. When a market has only a handful of transactions, its metrics swing violently, and a violent swing lands in the tail of the distribution. The score is not high because the market is good. It is high because the measurement is noisy. Confidence is what tells you which one you are looking at, and it is the reason the two numbers must never be averaged.</p></div>
+`,
+   q:{q:"Two markets: A scores 81 opportunity / 44 confidence. B scores 58 opportunity / 79 confidence. Which is the better candidate for your next flip, and why?",
+      opts:["A, because 81 is much higher than 58","B, because its evidence is strong enough to act on","Neither, both are unusable","A, but only after checking the pillar breakdown"],
+      a:1, fb:"B. A confidence of 44 sits in the Limited band, which means large parts of the picture are missing, stale, or contradicted. An 81 built on that is more likely to be measurement noise than opportunity. B's 58 is a real reading of a real market. Checking A's pillar breakdown is a good habit, but it does not repair the underlying evidence problem."}}
+ ]},
+
+ {name:"2 · Where the numbers come from", lessons:[
+  {t:"The lag problem, in real numbers",
+   html:`
+<p>You asked for data from the last week. Here is what actually exists, as of 11 August 2026.</p>
+<div id="c-lag"></div>
+<p style="margin-top:14px">${REAL} Release dates observed directly from each publisher on 11 August 2026.</p>
+<div class="call stop"><h4>Exactly one series in the whole system updates weekly</h4>
+<p>The mortgage rate. Everything that describes a housing market is monthly at best, and the repeat-sale price index that anchors appreciation describes <strong>May</strong>. On 11 August, the most authoritative reading of what homes actually sold for is nearly three months old.</p></div>
+<p>This has three consequences you should carry with you.</p>
+<ol class="body">
+<li><strong>A daily-refreshing dashboard would be theatre.</strong> PatternIQ scores weekly because that is the fastest cadence at which anything can actually change.</li>
+<li><strong>Different metrics describe different moments.</strong> A single market page mixes July listing data, May price data, Q1 county wages, and a five-year income average. The interface labels the age of each one because the mixture is unavoidable and hiding it would be dishonest.</li>
+<li><strong>Freshness is a component of Confidence, not a footnote.</strong> Each metric decays against its own expected cadence. The insurance data, which ends in 2022, contributes almost nothing.</li>
+</ol>
+`,
+   q:{q:"On 11 August 2026, what is the reference period of the most recent FHFA repeat-sale price index reading?",
+      opts:["The week ending 6 August","July 2026","May 2026","Q2 2026"],
+      a:2, fb:"May 2026, released 28 July. A 58-day lag. Anything more current about prices comes from list prices, which measure what sellers are asking, not what buyers paid. Those are different quantities and the next module explains why the gap between them matters."}},
+
+  {t:"Three tiers of source, and why licensing is a data quality problem",
+   html:`
+<p>Every dataset in PatternIQ carries a licence class in the database, and it is enforced rather than documented.</p>
+<div class="grid g3">
+<div class="tile"><span class="lab">Tier A</span><span class="val" style="font-size:16px">Public domain</span><span class="sub">FHFA, Census, BLS, BEA, FEMA, HUD, Freddie Mac. Store it, derive from it, show it. Some need an attribution line.</span></div>
+<div class="tile"><span class="lab">Tier B</span><span class="val" style="font-size:16px">Unverified</span><span class="sub">Realtor.com, Redfin, Zillow. Free, no authentication, and no confirmable permission to store in a private database.</span></div>
+<div class="tile"><span class="lab">Tier C</span><span class="val" style="font-size:16px">Does not exist free</span><span class="sub">Foreclosure and distress, MLS, local renovation cost, current insurance, property-level comps.</span></div>
+</div>
+<h2>The uncomfortable part</h2>
+<p>Look at what is actually in Tier B: <strong>days on market, active inventory, new listings, price reductions, sale-to-list ratio.</strong> Those are the metrics that tell you whether you could sell the house. They are the core of flip analysis, and there is no federal substitute for any of them.</p>
+<p>So PatternIQ ingests them, marks them <span class="badge unver">Unverified</span>, and blocks export of any figure whose lineage touches them until written permission is on file. You can analyse privately. You cannot email it to anyone.</p>
+<div class="call"><h4>Why this is a data quality issue and not just a legal one</h4>
+<p>A source whose terms you have not read is a source that can disappear. Redfin's general terms prohibit automated access without written permission. If that is enforced, the exit-liquidity pillar of the Opportunity Score cannot be computed from free data at all, and the score drops from seven pillars to six. Knowing which of your inputs sit on that footing is knowing how fragile your analysis is.</p></div>
+<p>One trap worth naming. FRED republishes many of these series, and FRED's own terms are permissive. Pulling <code>MEDDAYONMARUS</code> from FRED does not change the fact that Realtor.com owns it. FRED says so explicitly: you are responsible for the restrictions the original owner imposes.</p>
+`,
+   q:{q:"Which of these would be blocked from export under the licence rules?",
+      opts:["A county unemployment chart from BLS","An Opportunity Score whose exit-liquidity pillar used Realtor.com days on market","A FEMA hazard risk score","A mortgage rate chart from Freddie Mac, with attribution"],
+      a:1, fb:"Lineage is what matters, not the final number. The Opportunity Score is derived, but one of its inputs is an unverified source, so the whole figure inherits that status. BLS, FEMA and Freddie Mac are all fine, the last one with an attribution line."}},
+
+  {t:"Revisions, and the difference between what you knew and what you know",
+   html:`
+<p>Housing data revises constantly. FHFA restates its index as new repeat-sale pairs arrive. BLS benchmarks local unemployment annually. Realtor.com and Redfin restate recent months.</p>
+<p>Most analytics products overwrite. PatternIQ never does. Every observation is stored with the period it describes <strong>and</strong> the moment it was retrieved, and a revision is a new row beside its predecessor rather than on top of it.</p>
+<div class="call"><h4>Why an investor should care about a database design detail</h4>
+<p>Because it is the difference between a backtest and a story. If you want to know whether a pattern predicted anything in 2023, you have to score 2023 using only what was knowable in 2023. If your database has quietly replaced the 2023 values with today's restated ones, your backtest is reading the answer sheet. It will look brilliant and it will teach you nothing.</p></div>
+<p>You will see this on screen in one small way: every number carries both an observation date and a retrieval date, and the score run you are looking at is a stored snapshot rather than a live recomputation. Opening last month's weekly report shows last month's numbers, not this month's numbers in last month's layout.</p>
+<h3>The honest caveat</h3>
+<p>PatternIQ has no stored vintages from before it started running. For any period predating its own operation, it holds today's restated values, not what was published then. Backtests over those windows are labelled <strong>synthetic-vintage</strong> and cannot on their own promote a pattern to validated. That limitation is real, it is stated, and it resolves itself slowly as the system accumulates genuine history.</p>
+`,
+   q:{q:"Why can a backtest run on restated historical data look better than the strategy really was?",
+      opts:["Restated data has fewer missing values","The restated figures include information that was not available at the time","Older data is always more accurate","Revisions are usually upward"],
+      a:1, fb:"A restated value incorporates transactions and corrections that arrived after the decision date. Scoring a market with it means your model is quietly using the future. The effect is usually flattering, which is exactly why it goes unnoticed."}},
+
+  {t:"Geography, and the crosswalk tax",
+   html:`
+<p>Different sources reach different depths, and this shapes what PatternIQ can honestly say about a small area.</p>
+<table><caption>How deep each source actually reaches</caption>
+<thead><tr><th scope="col">Source</th><th scope="col">Deepest level</th><th scope="col">What it supplies</th></tr></thead>
+<tbody>
+<tr><td>FHFA</td><td>ZIP5 and census tract</td><td>Repeat-sale price index</td></tr>
+<tr><td>Realtor.com, Redfin</td><td>ZIP</td><td>Listing activity and liquidity</td></tr>
+<tr><td>BLS LAUS, QCEW</td><td>County</td><td>Unemployment, employment, wages</td></tr>
+<tr><td>Census ACS</td><td>Tract, but a five-year average</td><td>Income, tenure, property tax paid</td></tr>
+<tr><td>BEA</td><td>County, twelve-month lag</td><td>Income, GDP</td></tr>
+</tbody></table>
+<p>So a ZIP-level view is a mixture. Price and listing data are native to the ZIP. Employment and income arrive from the containing county through a crosswalk with an allocation weight.</p>
+<div class="call warn"><h4>The rule that matters</h4>
+<p>PatternIQ aggregates upward and <strong>never</strong> disaggregates downward. There is no code path that turns a county number into a ZIP number by splitting it. When a value reaches a geography through a crosswalk, it carries the allocation weight, the interface labels its native level, and the geographic precision component of Confidence drops accordingly.</p>
+<p>In practice a county-level analysis scores near 100 on precision. A ZIP-level analysis scores in the sixties or seventies, because all of its economic data is borrowed from one level up. That is not a defect. It is the honest price of looking at a smaller area.</p></div>
+<p>One technical note you will see referenced: what everyone calls a "ZIP" in Census data is really a ZCTA, a polygon the Census Bureau builds to approximate mail delivery areas. They diverge, particularly in rural areas and for PO-box-only ZIPs. The provenance panel says ZCTA when it means ZCTA.</p>
+`,
+   q:{q:"A ZIP-level market page shows an unemployment rate. Where did it almost certainly come from?",
+      opts:["A ZIP-level BLS survey","The containing county, allocated by a crosswalk","An average of neighbouring ZIPs","A model estimate built from ZIP income data"],
+      a:1, fb:"BLS does not publish unemployment below county level. The value is the county's, attached to the ZIP with an allocation weight, labelled as county-native, and paying a precision penalty in Confidence. Options three and four are both forms of inventing precision, which the system has no code path to do."}}
+ ]},
+
+ {name:"3 · Reading the metrics", lessons:[
+  {t:"Days on market",
+   html:`
+<p>The median number of days that listings which sold spent on the market before going under contract. For a flip it is the most direct measure of how long it takes to turn a finished house back into cash, and holding time compounds across interest, taxes, insurance and utilities simultaneously.</p>
+<div class="grid g3">
+${tile("US median DOM, July 2026","57 days","▼ 1 day vs July 2025","")}
+${tile("Streak broken","26 months","of consecutive YoY increases","")}
+${tile("Direction","Faster","than a year ago","up")}
+</div>
+<div id="c-dom" style="margin-top:14px"></div>
+<p>${REAL} Realtor.com Monthly Housing Trends, released 3 August 2026. February through June from the FRED mirror; July from the publisher's own report.</p>
+<h2>Reading that curve correctly</h2>
+<p>Days on market rose from 52 in May to 57 in July. Month over month, the market is slowing. Year over year, it is one day <strong>faster</strong> than last July, and that is the first annual decline in 26 months.</p>
+<div class="call"><h4>Seasonal slowing is not deterioration</h4>
+<p>Homes always take longer to sell as summer ends. If you compare July to May you will conclude the market is weakening, every single year, forever. The year-over-year comparison is what strips seasonality out, which is why every signal in PatternIQ's pattern framework is expressed year over year rather than month over month.</p></div>
+<h3>Three ways this metric misleads</h3>
+<ul>
+<li><strong>It only describes houses that sold.</strong> Listings that never found a buyer are invisible in it. In a genuinely bad market, the worst properties simply never appear.</li>
+<li><strong>Relistings restart the clock.</strong> A seller who withdraws and relists resets to day zero, which understates true time-to-sell precisely when markets are slow.</li>
+<li><strong>Publishers define it differently.</strong> Realtor.com's days on market and Redfin's are not the same quantity. Compare a market to itself over time, not to a different publisher's number.</li>
+</ul>
+`,
+   q:{q:"US days on market went from 52 in May to 57 in July, but is 1 day lower than last July. What is the correct read?",
+      opts:["The market is deteriorating, the month-over-month rise proves it","Normal seasonal slowing, and against last year it is marginally faster","The data is contradictory and should be ignored","Sellers are losing leverage"],
+      a:1, fb:"Both figures are true and they answer different questions. Month over month captures the seasonal calendar. Year over year strips it out and says this July is slightly tighter than last July. Pattern signals use the second one for exactly this reason."}},
+
+  {t:"Active inventory and new listings",
+   html:`
+<p>Active inventory is how many homes are for sale. New listings is how many arrived this month. Together they tell you whether supply is building because more sellers are arriving, or because the existing ones are not clearing.</p>
+<div class="grid g2">
+${tile("Active listings, July 2026","1,126,252","▲ 2.1% vs July 2025","")}
+${tile("New listings, July 2026","423,732","0.0% vs July 2025","flat")}
+</div>
+<div id="c-inv" style="margin-top:14px"></div>
+<p>${REAL} Realtor.com via FRED series ACTLISCOUUS and NEWLISCOUUS, both last updated 7 August 2026. Values match the publisher's own report exactly.</p>
+<h2>The diagnostic</h2>
+<p>Inventory is up 2.1% year over year. New listings are flat, exactly 0.0%. Since supply grew while the inflow of new sellers did not, the build came from slower clearing rather than a wave of new sellers.</p>
+<p>Note also the shape of the two lines. Active inventory climbed steadily from March to July, which is normal seasonal accumulation. New listings peaked in April and fell hard into July, which is also normal. Reading either line alone in isolation would tell you a story about the market that is really a story about the calendar.</p>
+<div class="call warn"><h4>+2.1% is a small number and that matters</h4>
+<p>Whether an inventory build is meaningful depends entirely on what that market's own history looks like. A 2.1% year-over-year rise, in a period when inventory has been rebuilding from historic lows at double-digit rates, is soft. PatternIQ never compares an inventory change to a fixed threshold. It compares it to that market's own trailing five-year distribution, which is the only way "up 2.1%" can mean the same thing in Boise and Buffalo.</p></div>
+<h3>National figures hide everything interesting</h3>
+<div id="c-region"></div>
+<p style="margin-top:10px">${REAL} Regional active inventory, year over year, July 2026.</p>
+<p>The Midwest is up 9.3%. The South is down 0.2%. Those are different worlds inside the same +2.1% headline, and PatternIQ does not score the nation for exactly this reason. It scores counties and metros, against peers of similar size.</p>
+`,
+   q:{q:"Inventory is up 2.1% year over year while new listings are flat at 0.0%. What does that combination imply?",
+      opts:["A wave of new sellers arrived","Supply built because existing listings cleared more slowly","Buyers have withdrawn from the market entirely","The data must be inconsistent"],
+      a:1, fb:"If the inflow is unchanged and the standing pool grew, the outflow slowed. That is a mild accumulation signal. It is worth noting it sits alongside days on market being one day faster than last year, which points the other way, and that tension is the honest state of this market."}},
+
+  {t:"Price reduction share",
+   html:`
+<p>The share of active listings that have cut their asking price. This is the closest thing free data offers to a measure of seller capitulation, and it is the most important single input to the acquisition side of the Opportunity Score.</p>
+<div class="grid g3">
+${tile("July 2026","20.0%","of active listings","")}
+${tile("July 2025","20.6%","prior year","")}
+${tile("Change","−0.6 pp","fewer sellers cutting","up")}
+</div>
+<p style="margin-top:12px">${REAL} Realtor.com Monthly Housing Trends, July 2026, released 3 August 2026.</p>
+<div class="call stop"><h4>The headline and the number disagree</h4>
+<p>The coverage of this release led with sellers cutting prices as summer cools. That is true month over month. But the share of listings with a price cut is <strong>lower</strong> than it was a year ago. Fewer sellers are cutting now than were cutting last July.</p>
+<p>If you were shopping for buyer leverage, the headline says yes and the data says no. This is the single most useful worked example in the course, and Module 5 returns to it.</p></div>
+<h2>Why it must be read with days on market</h2>
+<table><caption>Two indicators, four readings</caption>
+<thead><tr><th scope="col">Price cuts</th><th scope="col">Days on market</th><th scope="col">What it suggests</th></tr></thead>
+<tbody>
+<tr><td>Rising</td><td>Rising</td><td>Sellers capitulating into a slowing market. The classic acquisition window.</td></tr>
+<tr><td>Flat</td><td>Rising</td><td>Sellers waiting rather than cutting. Standoff. Leverage has not shifted yet.</td></tr>
+<tr><td>Rising</td><td>Flat</td><td>Aggressive pricing meeting steady demand. Often mix shift, not weakness.</td></tr>
+<tr><td>Falling</td><td>Falling</td><td>Tightening. The current national reading.</td></tr>
+</tbody></table>
+<p>A single indicator almost never carries a conclusion. Combinations do, which is the entire premise of the pattern engine.</p>
+`,
+   q:{q:"Price cuts at 20.0% versus 20.6% a year ago, and days on market one day faster. What does this pair say about buyer leverage nationally?",
+      opts:["Buyer leverage is increasing","Buyer leverage is not increasing; both signals point the other way","Only the price cut figure matters","Not enough information to say anything"],
+      a:1, fb:"Both indicators moved against buyer leverage year over year. Fewer sellers cutting, and homes selling marginally faster. The seasonal month-over-month softening is real but it is the calendar, not a shift in negotiating power."}},
+
+  {t:"List price versus the repeat-sale index",
+   html:`
+<p>Two things get called the price of housing and they are not the same measurement.</p>
+<div class="grid g2">
+<div class="tile"><span class="lab">Median list price · July 2026</span><span class="val">$428,950</span><span class="sub down">▼ 2.4% year over year</span></div>
+<div class="tile"><span class="lab">FHFA repeat-sale index · May 2026</span><span class="val">+2.2%</span><span class="sub up">▲ year over year</span></div>
+</div>
+<p style="margin-top:12px">${REAL} Realtor.com July 2026 report and FHFA House Price Index, May 2026 reference month, released 28 July 2026.</p>
+<div class="call warn"><h4>Asking prices are down 2.4% while transacted prices are up 2.2%. Both are correct.</h4></div>
+<p>They differ for three reasons, and understanding them is what separates a careful reader from a confident one.</p>
+<ol class="body">
+<li><strong>Mix shift.</strong> A median is the middle of whatever happened to be listed. If more small or cheap homes come to market, the median falls even if every individual house is worth more. FHFA's index tracks repeat sales of the <strong>same properties</strong>, so it is immune to this.</li>
+<li><strong>Asking is not selling.</strong> A list price is a seller's opinion. A repeat-sale index is a record of what someone paid.</li>
+<li><strong>They describe different months.</strong> The list price is July. The index is May. On 11 August, that is the freshest authoritative transacted-price reading available.</li>
+</ol>
+<p>Median price per square foot, at $226 and down 2.0% year over year, partially controls for size mix and lands closer to the list-price story than the index does. Three measurements, three answers, and the honest conclusion is that transacted prices are roughly flat to modestly up while sellers' expectations have come down.</p>
+<div class="call"><h4>How PatternIQ handles the disagreement</h4>
+<p>It does not reconcile them. Both are stored, and when overlapping estimators of the same construct diverge beyond a threshold, a discrepancy is recorded and shown. Silently averaging a list price and a repeat-sale index would produce a number that describes nothing.</p></div>
+`,
+   q:{q:"Median list price is down 2.4% but the repeat-sale index is up 2.2%. What is the most likely explanation?",
+      opts:["One of the sources is wrong","Mix shift plus the difference between asking and transacting, across different months","Sellers are overpricing and buyers are refusing","The index is out of date and should be ignored"],
+      a:1, fb:"Both are right, measuring different things. The median list price is affected by what happened to be listed; the repeat-sale index follows the same homes over time and is immune to mix shift. Add the two-month gap between reference periods and the divergence is fully explained without either source being wrong."}},
+
+  {t:"Pending sales, and reading a deceleration",
+   html:`
+<p>Pending sales are homes under contract but not yet closed. It is the most forward-looking demand indicator in the free data, because a contract today is a closing in thirty to sixty days.</p>
+<div class="grid g3">
+${tile("May 2026","+4.1%","year over year","up")}
+${tile("June 2026","+3.7%","year over year","up")}
+${tile("July 2026","+1.3%","year over year","up")}
+</div>
+<p style="margin-top:12px">${REAL} Realtor.com July 2026 report. Eighth consecutive month of year-over-year growth, the longest run since June 2021.</p>
+<h2>Two true sentences</h2>
+<p><strong>"Pending sales grew for the eighth straight month, the longest streak in five years."</strong> True, and it is the sentence the press release led with.</p>
+<p><strong>"Pending sales growth fell by two thirds in two months."</strong> Also true, from the same three numbers.</p>
+<div class="call"><h4>The level is positive. The second derivative is not.</h4>
+<p>Growth that decelerates from 4.1 to 3.7 to 1.3 is on a path toward zero. Whether it crosses is not knowable from three data points, and PatternIQ will not pretend otherwise. But an investor who reads only the streak has missed the more informative fact.</p>
+<p>This is why pattern signals require <strong>persistence</strong>, typically three consecutive periods, rather than firing on a single reading. It costs two to three months of lag and it is the single most effective defence against reacting to noise.</p></div>
+<p>Note what is happening underneath: pending sales are still growing, mortgage rates have risen five weeks running, and payrolls went slightly negative. Demand is holding up against a stiffening headwind. That could mean resilience or it could mean a lag. The system's job is to show you both readings, not to pick.</p>
+`,
+   q:{q:"Pending sales: +4.1%, +3.7%, +1.3% over three months, all positive. How should a pattern engine treat this?",
+      opts:["Fire a demand-deterioration signal, the trend is clearly down","Ignore it, all three months are positive growth","Record the deceleration but require persistence before acting on it","Average them to +3.0% and move on"],
+      a:2, fb:"The deceleration is real information and should be visible. But three points is not a trend you can act on, and firing on it would generate false positives across thousands of markets every week. Persistence requirements exist precisely for this. Averaging destroys the very thing that is informative here, which is the direction of change."}},
+
+  {t:"Carrying cost and the labour market",
+   html:`
+<p>Two inputs that sit outside the housing data itself and change the arithmetic of every deal.</p>
+<div id="c-rate"></div>
+<p style="margin-top:12px">${REAL} Freddie Mac Primary Mortgage Market Survey, week ending 6 August 2026. Five consecutive weekly increases. This is the only genuinely weekly series in the entire data plan.</p>
+<div class="grid g3">
+${tile("30-year fixed","6.69%","▲ from 6.66% last week","down")}
+${tile("A year ago","6.63%","▲ 0.06 pp higher now","")}
+${tile("15-year fixed","6.01%","▼ from 6.04% last week","up")}
+</div>
+<div class="call warn"><h4>This rate is probably not your rate</h4>
+<p>PMMS surveys conventional conforming 30-year mortgages for owner-occupant buyers. It is not a rehab loan, a bridge loan, or hard money. <strong>The rate a flipper actually pays is not published anywhere, by anyone, for free.</strong> The Deal Analyzer therefore takes your financing cost as an input with a documented default, and labels it as your assumption rather than observed data.</p>
+<p>PMMS still matters, because it sets what your eventual buyer can afford. It affects your exit, not your carry.</p></div>
+<h2>Employment</h2>
+<div class="grid g2">
+${tile("Unemployment rate · July 2026","4.1%","BLS, released 7 August","")}
+${tile("Nonfarm payroll change · July 2026","−23,000","a decline","down")}
+</div>
+<p style="margin-top:12px">${REAL} BLS Employment Situation, released 7 August 2026. BLS characterised both as little changed.</p>
+<p>Employment underpins the exit side of a flip thesis. A market can look excellent on every listing metric and still be a poor bet if the local job base is contracting, because your buyer needs an income. In the pattern framework, a deteriorating labour market is an <strong>invalidation condition</strong>: it reclassifies an apparent acquisition window as demand collapse.</p>
+`,
+   q:{q:"Why does PatternIQ treat the PMMS mortgage rate as an exit-side input rather than a carrying-cost input?",
+      opts:["Because it is national and PatternIQ works at county level","Because it prices what your buyer can afford, not what you will pay to hold","Because it updates too frequently to be useful","Because Freddie Mac requires attribution"],
+      a:1, fb:"A flipper typically finances with a rehab or hard money loan, and no free source publishes those rates. PMMS describes the conventional 30-year mortgage your eventual buyer will use, so it drives affordability and demand at your exit. Your own carrying cost is an input you supply."}}
+ ]},
+
+ {name:"4 · How the scores are built", lessons:[
+  {t:"Peer sets and percentiles, worked",
+   html:`
+<p>Every feature in the Opportunity Score becomes a percentile rank inside a peer set. Understanding this one mechanism explains most of the product's behaviour.</p>
+<h2>What a peer set is</h2>
+<p>All geographies of the <strong>same level</strong> whose population falls in the <strong>same third</strong> of the national distribution for that level. Three geography levels times three population tiers gives nine peer sets. A market is never ranked against a market of a different size or type.</p>
+<div class="call"><h4>Why not just compare everything to everything?</h4>
+<p>Because a rural county of 8,000 people and Los Angeles County do not have comparable inventory volatility, and pretending they do produces noise dressed as signal.</p></div>
+<h2>The four steps, worked</h2>
+<p>Take price reduction share for a hypothetical county in a peer set of 1,033.</p>
+<ol class="body">
+<li><strong>Winsorise.</strong> Clip to the 1st and 99th percentile of the peer set, so one broken observation cannot dominate.</li>
+<li><strong>Rank.</strong> The county sits 837th out of 1,033 from the bottom. <code>837 / 1033 = 81st percentile</code>.</li>
+<li><strong>Orient.</strong> For a flipper <strong>buying</strong>, more sellers cutting is favourable, so higher is better. The value stays at <strong>81</strong>. For days on market it would be inverted, since lower is better.</li>
+<li><strong>Combine.</strong> The oriented value joins the other features in its pillar as a coverage-weighted mean.</li>
+</ol>
+<div class="call warn"><h4>Percentiles, not z-scores</h4>
+<p>Housing distributions are skewed and fat-tailed. A z-score computed on a non-normal distribution produces a number that looks interpretable and is not. A percentile rank makes no distributional assumption and cannot be blown up by an outlier.</p>
+<p>The cost is that a percentile tells you position, not magnitude. An 81 means only that 81% of comparable markets have fewer price cuts. It does not say by how much. That is why the interface always shows the raw value beside the rank.</p></div>
+<div class="grid g2">
+${tile("Percentile rank","81","of comparable markets have fewer cuts","")}
+${tile("Underlying raw value","21.4%","of listings with a price cut","")}
+</div>
+<p style="margin-top:10px">${ILLUS} Invented to demonstrate the calculation. Not a real market.</p>
+`,
+   q:{q:"A market's days on market sits at the 20th percentile of its peer set. After orientation, what does it contribute to the exit liquidity pillar?",
+      opts:["20, because that is the percentile","80, because lower days on market is better and the scale is inverted","50, because it is below average","It is excluded from the pillar"],
+      a:1, fb:"Days on market has lower-is-better polarity, so the rank is inverted: 100 − 20 = 80. Only 20% of comparable markets sell faster, which is a strong exit-liquidity reading. After orientation every feature runs the same direction: higher means more favourable for a flip."}},
+
+  {t:"The seven pillars, and what each can actually see",
+   html:`
+<p>The Opportunity Score is a weighted mean of seven pillars. The weights are declared priors, not fitted, and they are stored as data rather than code so they can be replaced when backtesting justifies it.</p>
+<table><caption>Opportunity Score v1 pillar weights and honest data coverage</caption>
+<thead><tr><th scope="col">Pillar</th><th scope="col" class="n">Weight</th><th scope="col">What it can actually see</th></tr></thead>
+<tbody>
+<tr><td><strong>Exit liquidity</strong></td><td class="n">0.24</td><td>DOM, sale-to-list, pending ratio. <span class="badge unver">All Tier B</span></td></tr>
+<tr><td><strong>Acquisition</strong></td><td class="n">0.22</td><td>Price cuts, inventory, months of supply. <strong>Distress data missing entirely.</strong></td></tr>
+<tr><td><strong>Economic strength</strong></td><td class="n">0.18</td><td>Unemployment, employment growth, population, income, permits. <span class="badge pd">Tier A, best data in the model</span></td></tr>
+<tr><td><strong>Market risk</strong></td><td class="n">0.15</td><td>Price volatility, inventory acceleration, FEMA hazard index, disaster history</td></tr>
+<tr><td><strong>Carrying costs</strong></td><td class="n">0.10</td><td>Property tax from ACS, insurance from a 2022 snapshot, national mortgage rate</td></tr>
+<tr><td><strong>Renovation economics</strong></td><td class="n">0.06</td><td>County construction wages and permit volume as proxies. No local cost data exists.</td></tr>
+<tr><td><strong>Transaction costs</strong></td><td class="n">0.05</td><td>Hand-curated transfer tax and recording fees, per state</td></tr>
+</tbody></table>
+<div class="call stop"><h4>Read the weights as an admission, not a claim</h4>
+<p>Exit liquidity is weighted highest because the failure mode that kills flips is not selling. Acquisition is second, but reduced from what intuition suggests because distress data is missing, so the pillar is measuring less than it should.</p>
+<p><strong>Renovation economics is weighted 0.06 because it is nearly blind.</strong> Materials price indexes are national, so every market in a peer set gets an identical value and it contributes nothing to ranking one market against another. What is left is county construction wages and permit volume, two unvalidated proxies. Weighting it higher would be pretending to know something.</p></div>
+<h3>What happens when a pillar has gaps</h3>
+<p>Missing features are not treated as zero, because zero means "worst in peer set" and missing means "we don't know". The pillar is a coverage-weighted mean over the features that <strong>are</strong> present, and the missing coverage flows into Confidence instead. If a pillar has less than 60% of its features, it is marked unavailable and its weight is redistributed.</p>
+`,
+   q:{q:"Why is the renovation economics pillar weighted at only 0.06 when renovation cost is obviously central to a flip?",
+      opts:["Renovation cost rarely varies between markets","Because no local renovation cost data exists free, so the pillar is nearly blind","Because it was measured as unimportant in backtesting","Because renovation is the investor's responsibility, not the market's"],
+      a:1, fb:"Renovation cost matters enormously. There is simply no free local measure of it. Materials indexes are national and therefore identical across a peer set, contributing nothing to relative ranking. The weight reflects what the pillar can see, not how much the underlying factor matters. Note that no backtesting has been run yet, so option three cannot be true of anything in v1."}},
+
+  {t:"Confidence, component by component",
+   html:`
+<p>Seven components, each scored 0 to 100, combined as a weighted mean. Every one is visible in the interface with its own reason.</p>
+<div id="c-conf"></div>
+<p style="margin-top:12px">${ILLUS} Component weights are real product specification; the scores shown are an example market.</p>
+<table><caption>What each component measures</caption>
+<thead><tr><th scope="col">Component</th><th scope="col" class="n">Weight</th><th scope="col">Measures</th></tr></thead>
+<tbody>
+<tr><td>Coverage</td><td class="n">0.25</td><td>Share of expected evidence present, weighted by how much each feature matters</td></tr>
+<tr><td>Freshness</td><td class="n">0.20</td><td>Exponential decay against each metric's own expected cadence</td></tr>
+<tr><td>Sample adequacy</td><td class="n">0.15</td><td>Transaction counts, listing counts, repeat-sale pairs against declared minimums</td></tr>
+<tr><td>Source agreement</td><td class="n">0.15</td><td>How many independent publishers, and whether overlapping estimators agree</td></tr>
+<tr><td>Historical depth</td><td class="n">0.10</td><td>Usable quarters against a twenty-quarter target</td></tr>
+<tr><td>Geographic precision</td><td class="n">0.10</td><td>Penalty when data arrives through a crosswalk rather than natively</td></tr>
+<tr><td>Model stability</td><td class="n">0.05</td><td>How much this market's rank swings between runs</td></tr>
+</tbody></table>
+<div class="call stop"><h4>Every market in America starts with a permanent penalty</h4>
+<p>Distress features sit in the coverage denominator and are never in the numerator, because the data does not exist anywhere free. That costs roughly <strong>6 coverage points to every single market</strong>, permanently.</p>
+<p>Combined with the annual lag on ACS income and property tax, and a homeowners insurance file that stops in 2022, this means a Confidence above 90 is effectively unreachable on free data. That ceiling is intentional and it is a standing reminder that the picture is incomplete.</p></div>
+<h3>Confidence is not accuracy</h3>
+<p>It never claims the number is right. It says how strong the evidence behind the number is. Accuracy would require knowing the truth, which is what backtesting is for and which has not been run yet.</p>
+`,
+   q:{q:"A market's confidence drops from 71 to 58 with no change in the market itself. What is the most likely cause?",
+      opts:["The Opportunity Score fell","A data source missed its release, so freshness and coverage decayed","The market became riskier","The peer set got smaller"],
+      a:1, fb:"Confidence responds to the state of the evidence, not the state of the market. A source that goes quiet decays on freshness immediately and drops out of coverage once it passes its window. Nothing about the market changed; our ability to see it did."}},
+
+  {t:"Gates, and why withheld is a feature",
+   html:`
+<p>A market receives a published Opportunity Score only when all five gates pass. Otherwise it gets a row with no score and a stated reason.</p>
+<table><caption>The five publication gates</caption>
+<thead><tr><th scope="col">Gate</th><th scope="col">Requirement</th><th scope="col">Why</th></tr></thead>
+<tbody>
+<tr><td>G1</td><td>At least 4 of 7 pillars, and both acquisition and exit must be present</td><td>A score without acquisition or exit signal is not a flip score</td></tr>
+<tr><td>G2</td><td>Peer set of at least 30</td><td>Percentile ranks on a small set are noise</td></tr>
+<tr><td>G3</td><td>Confidence at or above 40</td><td>Below this the number misleads more than it informs</td></tr>
+<tr><td>G4</td><td>70% of features within two expected cadence intervals</td><td>Stale inputs produce a confident picture of last year</td></tr>
+<tr><td>G5</td><td>No unresolved blocking data quality failure</td><td>A broken source should stop the score, not colour it</td></tr>
+</tbody></table>
+<div class="call warn"><h4>Expect roughly half of all US counties to be withheld</h4>
+<p>Not because the software failed, but because Realtor.com and Redfin suppress listing metrics in low-population areas, and BLS suppresses construction wages in thin county-industry cells. In small markets, the data genuinely is not there.</p>
+<p>A dashboard that showed only scored markets would look complete and would be lying by omission. PatternIQ shows the withheld count in the header and accounts for every evaluated market: <strong>scored plus withheld equals evaluated, exactly.</strong></p></div>
+<h3>What to do with a withheld market you care about</h3>
+<p>The withheld panel names the gate and what would change it. If it failed G3 on confidence, the reason is usually publisher suppression at that population size, and there is no fix short of buying data. If it failed G4 on staleness, it may score next month when the source catches up. Either way you know which, and that is the point.</p>
+`,
+   q:{q:"You are interested in a rural county and PatternIQ shows it as withheld under G1. What does that mean?",
+      opts:["The county is a bad investment","Fewer than four pillars were computable, or acquisition or exit was missing entirely","The confidence score was below 40","The software could not find the county"],
+      a:1, fb:"G1 is the pillar-availability gate. In rural counties the usual cause is that listing metrics are suppressed by the publisher, which takes out the exit liquidity pillar and often acquisition too. It says nothing about the county's merit as an investment. It says PatternIQ cannot see enough to have an opinion."}}
+ ]},
+
+ {name:"5 · Patterns", lessons:[
+  {t:"What a pattern is, and what it is not",
+   html:`
+<p>A pattern is a named combination of signals that must all hold, for a stated number of consecutive periods, with no invalidation condition firing. It is stored as a declarative specification, not as code, so every one is inspectable and testable.</p>
+<h2>Anatomy of a pattern</h2>
+<table><caption>The parts of a pattern specification</caption>
+<thead><tr><th scope="col">Part</th><th scope="col">What it does</th></tr></thead>
+<tbody>
+<tr><td><strong>Required signals</strong></td><td>All must fire, or the pattern does not exist. No partial credit.</td></tr>
+<tr><td><strong>Thresholds</strong></td><td>Expressed relative to the market's own history or its peer set. Never an absolute magic number.</td></tr>
+<tr><td><strong>Persistence</strong></td><td>Consecutive periods the condition must hold. The strongest false-positive control available.</td></tr>
+<tr><td><strong>Corroborating signals</strong></td><td>Do not gate detection, but raise the strength score.</td></tr>
+<tr><td><strong>Invalidation conditions</strong></td><td>Any one firing suppresses the pattern, even if every required signal is satisfied.</td></tr>
+<tr><td><strong>What to watch next</strong></td><td>The indicators that would confirm or break the reading.</td></tr>
+</tbody></table>
+<div class="call"><h4>Why thresholds are relative</h4>
+<p>"Inventory up 14%" means something completely different in a market that routinely swings 30% than in one that never moves 5%. A threshold like "above the 70th percentile of this market's own trailing five years" means the same thing everywhere. It also means a pattern cannot fire in a market without enough history, which is correct.</p></div>
+<div class="call stop"><h4>The multiple comparisons problem, stated plainly</h4>
+<p>Scanning roughly 4,000 markets against 15 patterns every week is 60,000 tests. Some will fire by chance. That is arithmetic, not pessimism.</p>
+<p>Defences: persistence requirements, a minimum confidence floor, a minimum coverage floor, invalidation evaluated before detection, false discovery rate control on any statistical claim, and base rates published beside every hit rate. "Followed by favourable conditions 58% of the time" is meaningless. "58% against a base rate of 51%, n = 84" is a finding, and a modest one.</p></div>
+`,
+   q:{q:"A pattern's three required signals all fire, but unemployment has risen 1.8 points over twelve months. What happens?",
+      opts:["The pattern is detected with reduced strength","The pattern is suppressed, because an invalidation condition fired","The pattern is detected but flagged","Unemployment is not part of pattern logic"],
+      a:1, fb:"Invalidation conditions are evaluated before detection and override required signals entirely. Rising inventory and lengthening days on market during a collapsing labour market is not buyer leverage, it is demand deterioration. Naming it wrongly would be worse than saying nothing."}},
+
+  {t:"Worked: does Increasing Buyer Leverage fire in July 2026?",
+   html:`
+<p>This is the capstone of the course. You now have everything needed to evaluate a real pattern against real data.</p>
+<h2>The specification</h2>
+<p><strong>Increasing Buyer Leverage.</strong> Supply is building, homes are taking longer to sell, and sellers are cutting prices, while transaction prices and local employment have not yet broken. Three required signals, each at or above the 70th percentile of the market's own trailing twenty quarters, with two to three periods of persistence.</p>
+<h2>The evidence</h2>
+<table><caption>National data, July 2026, tested against the pattern's required signals</caption>
+<thead><tr><th scope="col">Required signal</th><th scope="col" class="n">Observed</th><th scope="col">Direction needed</th><th scope="col">Fires?</th></tr></thead>
+<tbody>
+<tr><td>Active listings, year over year</td><td class="n">+2.1%</td><td>High vs own history</td><td class="down">No, soft</td></tr>
+<tr><td>Median days on market, year over year</td><td class="n">−1 day</td><td>Rising</td><td class="down">No, wrong sign</td></tr>
+<tr><td>Price reduction share, year over year</td><td class="n">−0.6 pp</td><td>Rising</td><td class="down">No, wrong sign</td></tr>
+</tbody></table>
+<p>${REAL} All three figures from the Realtor.com July 2026 report, released 3 August 2026.</p>
+<div class="call stop"><h4>Zero of three required signals fire. The pattern does not exist here.</h4>
+<p>Two of the three are not merely weak, they point in the <strong>opposite</strong> direction. Fewer sellers are cutting than a year ago, and homes are selling marginally faster.</p></div>
+<h2>Why this is the most important lesson in the course</h2>
+<p>The coverage of this exact release was headlined around sellers cutting prices as the market cools. Read that headline, and you would go looking for acquisition opportunities.</p>
+<p>The headline is describing <strong>month-over-month seasonal softening</strong>, which happens every single summer. The pattern framework asks a different question: is this market weaker <strong>than it was a year ago</strong>, by the standards of its own history? On that question the answer is no.</p>
+<div class="call"><h4>What the system saves you from</h4>
+<p>Not a bad market. A <strong>bad reading</strong> of an ordinary market. Seasonality is the most common way housing data misleads people, and the defence is unglamorous: year-over-year framing, own-history thresholds, persistence requirements. None of it is clever. All of it is why the answer here is no.</p></div>
+<h3>Two caveats, both real</h3>
+<ul>
+<li><strong>National is not a market.</strong> PatternIQ scores counties and metros. The Midwest is up 9.3% on inventory while the South is down 0.2%. Individual counties inside those regions will absolutely show buyer leverage. The national reading tells you the tide is not carrying you.</li>
+<li><strong>This was evaluated against direction, not against a fitted own-history distribution.</strong> A real evaluation needs twenty quarters of that market's own data. Two of three signals have the wrong sign, so the conclusion is safe, but do not mistake this worked example for the full computation.</li>
+</ul>
+`,
+   q:{q:"Press coverage said sellers are cutting prices as summer cools. The pattern engine says buyer leverage is not increasing. Which is wrong?",
+      opts:["The press, they misread the data","The pattern engine, it is too conservative","Neither, they answer different questions over different comparison windows","The data is contradictory and neither can be trusted"],
+      a:2, fb:"The press is describing month-over-month seasonal softening, which is genuinely happening. The engine is asking whether this market is weaker than a year ago by its own historical standards, and the answer is no. Both statements are true. Only one of them should move your money."}},
+
+  {t:"Validation status, and why unvalidated patterns are capped",
+   html:`
+<p>Every pattern carries a lifecycle status, and it governs what the interface is allowed to say.</p>
+<table><caption>Pattern lifecycle</caption>
+<thead><tr><th scope="col">Status</th><th scope="col">Meaning</th><th scope="col">What the interface may say</th></tr></thead>
+<tbody>
+<tr><td><strong>Unvalidated</strong></td><td>Specified and firing, never tested</td><td>Confidence capped at 40. No historical narrative at all.</td></tr>
+<tr><td><strong>In validation</strong></td><td>Backtest running, below sample gates</td><td>Partial results with sample counts and confidence intervals</td></tr>
+<tr><td><strong>Validated</strong></td><td>Cleared every sample gate</td><td>Full presentation with base rate, lift, interval and n</td></tr>
+<tr><td><strong>Retired</strong></td><td>Tested and failed</td><td>Kept visible with the reason, as teaching material</td></tr>
+</tbody></table>
+<div class="call stop"><h4>Every pattern in PatternIQ today is unvalidated</h4>
+<p>No backtest has been run, because the system has not been built. So every pattern displays: "No historical validation yet. This is a described combination of current signals, not a demonstrated predictor." And confidence cannot exceed 40, which places it in the Low band.</p>
+<p>That cap is deliberate. It is structurally impossible for an untested pattern to appear authoritative.</p></div>
+<h2>The gates a pattern must clear</h2>
+<ul>
+<li>At least <strong>30 instances</strong> across at least <strong>8 distinct markets</strong> and <strong>3 distinct calendar years</strong></li>
+<li>Lift confidence interval excluding zero after false discovery rate adjustment</li>
+<li>Some genuine-vintage evidence, not synthetic-vintage alone</li>
+<li>Sign stable across alternative outcome definitions</li>
+</ul>
+<div class="call"><h4>Retirement is a feature</h4>
+<p>A pattern with 50+ instances whose lift interval still contains zero is retired, and it stays visible in the library with its statistics and the reason. An intuitive pattern that does not work is more instructive than one that was never tested, and deleting it would let the same idea come back next year wearing a different name.</p></div>
+<p>The broader principle: a negative result published as prominently as a positive one is the most valuable thing this system can produce in its first year. A backtest showing the Opportunity Score does not beat simple price momentum would save you from placing money on it, and that is worth more than any dashboard.</p>
+`,
+   q:{q:"A pattern fires in your target market with a strength of 88. Its status is unvalidated. What is its maximum displayed confidence?",
+      opts:["88, matching its strength","60, the pattern minimum","40, the unvalidated cap","100, since all signals fired"],
+      a:2, fb:"Strength and confidence are different quantities. Strength says how many signals fired. Confidence says how much you should rely on it. An unvalidated pattern is capped at 40, the Low band, no matter how strongly it fires, because nobody has yet checked whether it predicts anything."}}
+ ]},
+
+ {name:"6 · Using it", lessons:[
+  {t:"The Deal Analyzer is arithmetic, not prophecy",
+   html:`
+<p>Every number the Deal Analyzer produces is a consequence of an assumption you supplied. It contains no model, no forecast and no probability, and it will not until calibration testing passes.</p>
+<div class="call"><h4>Why that is a feature on day one</h4>
+<p>Deterministic arithmetic on your own assumptions is genuinely useful immediately, has no data dependency, and creates no false precision. A predicted profit with a fake confidence interval would be worse than useless.</p></div>
+<h2>The inputs that are actually assumptions</h2>
+<table><caption>Inputs the interface explicitly labels as your assumption</caption>
+<thead><tr><th scope="col">Input</th><th scope="col">Why it is not data</th></tr></thead>
+<tbody>
+<tr><td>Estimated ARV</td><td>No comps or AVM on free data. This is your judgment.</td></tr>
+<tr><td>Interest rate</td><td>Rehab and hard money rates are not published anywhere.</td></tr>
+<tr><td>Renovation budget</td><td>No local cost index exists free.</td></tr>
+<tr><td>Agent commission</td><td>Practice changed materially after the 2024 NAR settlement.</td></tr>
+<tr><td>Holding period</td><td>Yours to estimate. See below.</td></tr>
+</tbody></table>
+<h3>The one place market data enters</h3>
+<p>The market context card compares your assumptions to the market's measured behaviour. If you assume a 150-day hold in a county whose median days on market is 44, plus a renovation window, the card will point out that your assumption is optimistic and suggest testing 180 and 210. That is tagged as an <strong>inference</strong>, reasoning from the pillar breakdown. It is not a prediction and it is not styled like one.</p>
+<h3>Use the sensitivity grid before the point estimate</h3>
+<p>A single expected profit figure invites false confidence. The grid shows profit across a range of resale prices and renovation costs simultaneously. The useful question is not "what do I expect to make" but <strong>"how wrong can my two biggest assumptions be before this deal loses money"</strong>. That is the number that should decide whether you proceed.</p>
+`,
+   q:{q:"The Deal Analyzer shows an expected net profit of $38,420. What kind of claim is that?",
+      opts:["A prediction with an implied confidence interval","Arithmetic on the assumptions you entered","A market-calibrated estimate","A probability-weighted expected value"],
+      a:1, fb:"It is tagged as a fact in the sense of being arithmetic: a deterministic consequence of your inputs. Change the ARV and it changes. No model produced it, no probability attaches to it, and none will until calibration testing passes. The sensitivity grid is the honest way to read it."}},
+
+  {t:"Your own history is the best data you will ever have",
+   html:`
+<p>Everything up to this point is public data measuring proxies. Your completed projects measure the actual thing: profit, duration, cost accuracy.</p>
+<h2>What gets tracked</h2>
+<p>Planned versus actual on every line: purchase price, renovation by category, holding days, financing, taxes, insurance, closing costs, list price, sale price, days on market, net profit. Per project and per renovation category.</p>
+<h2>The sample size discipline</h2>
+<table><caption>What PatternIQ will say at each sample size</caption>
+<thead><tr><th scope="col" class="n">Completed</th><th scope="col">What is shown</th></tr></thead>
+<tbody>
+<tr><td class="n">1 to 2</td><td><strong>Nothing.</strong> Two projects cannot establish a tendency.</td></tr>
+<tr><td class="n">3 to 5</td><td>Early signal, low confidence, with n in the headline and an explicit statement that this is not yet reliable</td></tr>
+<tr><td class="n">6 to 9</td><td>Presented as a personal pattern, with a confidence interval on the effect size</td></tr>
+<tr><td class="n">10 or more</td><td>Eligible to adjust your personalised estimates, with your explicit approval</td></tr>
+</tbody></table>
+<div class="call warn"><h4>This is where the discipline is hardest and matters most</h4>
+<p>Two projects that both ran over budget feel like a pattern. They are not. The temptation to draw a conclusion from your own vivid recent experience is far stronger than the temptation to over-read a county's inventory data, because you were there.</p>
+<p>PatternIQ will hold the line and show you the sample size in the headline rather than the footnote. Nothing adjusts an underwriting default automatically. It proposes, you accept, and the acceptance is recorded.</p></div>
+<h2>Guided follow-up</h2>
+<p>Personal data only works if it gets entered, and it only gets entered if it is easy. Status transitions trigger prefilled, one-click prompts. <strong>Every prompt states why it is asking</strong> before it asks, because a request for data you do not understand the purpose of is a request you will eventually ignore.</p>
+`,
+   q:{q:"Your first three projects all ran 12 to 14 percent over their renovation budgets. What does PatternIQ do?",
+      opts:["Raises your default contingency to 13 percent automatically","Shows an early signal with n = 3 in the headline and no automatic adjustment","Says nothing until six projects are complete","Treats it as a validated personal pattern"],
+      a:1, fb:"Three crosses the floor for an early signal, so it is shown, with the sample size in the headline and an explicit statement that it is not yet a reliable pattern. Automatic adjustment requires ten completed projects and your approval. Nothing in the system silently changes your underwriting."}},
+
+  {t:"The Monday routine, and what to do when it disagrees with you",
+   html:`
+<p>PatternIQ refreshes weekly. Here is a working routine, in the order that keeps you honest.</p>
+<ol class="body">
+<li><strong>Read the withheld count first.</strong> Before any score. It tells you how much of the country the system can currently see, and a jump means a source broke.</li>
+<li><strong>Check confidence changes before opportunity changes.</strong> A score that moved because the evidence improved is a different event from one that moved because the market did.</li>
+<li><strong>Read warning patterns before favourable ones.</strong> They are displayed at equal weight for a reason. A market can show improving acquisition and deteriorating exit at the same time, and that combination has ended more flips than any other.</li>
+<li><strong>Open the pillar breakdown on anything you are tempted by.</strong> A composite of 62 tells you nothing. Acquisition 78 with exit 44 tells you the whole story.</li>
+<li><strong>Answer one follow-up prompt.</strong> The personal dataset is the only one that compounds.</li>
+<li><strong>Read the learning topic.</strong> It is tied to something actually happening in your markets.</li>
+</ol>
+<h2>When the system disagrees with your instinct</h2>
+<div class="call"><p>You now have a live example. Coverage of the July 2026 data says sellers are cutting and the market is cooling. The pattern engine says buyer leverage is not increasing. Both are honest readings of the same month.</p>
+<p>The resolution is not to pick a side. It is to notice that they are answering different questions, and to be clear about which question your money is exposed to. If you are buying to sell in six months, the year-over-year question is the one that matters. If you are negotiating on a specific house this week, the month-over-month softening is real leverage at the table.</p></div>
+<h2>What would make you right to override it</h2>
+<p>Local knowledge the data cannot hold. A specific street, a school catchment change, a contractor relationship, an employer announcement not yet in the statistics. Those are legitimate and the system cannot see them.</p>
+<p>What is <strong>not</strong> a good reason to override it: the score is lower than you hoped, or a pattern you like has not fired. The decision journal records what was on screen when you decided and what you decided, precisely so that this becomes checkable over time rather than a matter of memory.</p>
+<div class="call warn"><h4>The last thing</h4>
+<p>PatternIQ succeeds if you get better at reading markets, to the point where you see the pattern before the software names it. A tool that makes you dependent on it has failed even if every number it produced was correct.</p></div>
+`,
+   q:{q:"You want to buy in a county PatternIQ scores 51 with high confidence, because you know a major employer is expanding there next year. Is overriding the score reasonable?",
+      opts:["No, the score has high confidence and should be followed","Yes, that is local knowledge the data cannot hold yet, and the journal will record it","No, unless a pattern also fires","Yes, but only if the score is above 50"],
+      a:1, fb:"An employer announcement that has not reached the statistics is exactly the kind of information a public-data system cannot see. Overriding is legitimate. What makes it disciplined rather than sloppy is recording the reasoning in the decision journal, so that in eighteen months you can check whether your local knowledge actually paid."}}
+ ]}
+];
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+const flat=[]; MODULES.forEach((m,mi)=>m.lessons.forEach((l,li)=>flat.push({...l,mi,li,mod:m.name})));
+let cur=0; const answered={}; let correct=0, attempted=0;
+
+const toc=document.getElementById("toc");
+let n=0, tocHtml="";
+MODULES.forEach((m,mi)=>{
+  tocHtml+=`<div class="modhead">${m.name}</div><ol>`;
+  m.lessons.forEach(()=>{const i=n++; tocHtml+=`<li><button type="button" data-i="${i}" id="tocb${i}"><span class="no">${String(i+1).padStart(2,"0")}</span><span>${flat[i].t}</span></button></li>`;});
+  tocHtml+="</ol>";
+});
+toc.innerHTML=tocHtml;
+
+const host=document.getElementById("lessons");
+flat.forEach((l,i)=>{
+  const sec=document.createElement("section");
+  sec.className="lesson"; sec.id="L"+i; sec.hidden=true;
+  sec.setAttribute("aria-labelledby","h"+i);
+  sec.innerHTML=`<p class="eyebrow">${l.mod} · Lesson ${i+1} of ${flat.length}</p><h1 id="h${i}">${l.t}</h1>${l.html}
+  <div class="quiz"><p class="qh">Check yourself</p><p class="qq">${l.q.q}</p>
+  <div class="opts" role="group" aria-label="Answer options">${l.q.opts.map((o,j)=>`<button type="button" data-q="${i}" data-o="${j}"><span class="flag">${String.fromCharCode(65+j)}</span>${o}</button>`).join("")}</div>
+  <div class="fb" id="fb${i}"></div></div>`;
+  host.appendChild(sec);
+});
+
+function charts(){
+  const put=(id,node)=>{const el=document.getElementById(id); if(el&&!el.dataset.done){el.appendChild(node);el.dataset.done="1";}};
+  put("c-lag", barChart({title:"Publication lag by series, as of 11 August 2026",sub:"DAYS BETWEEN THE END OF THE REFERENCE PERIOD AND PUBLICATION",
+    alt:"Horizontal bar chart of publication lag in days. Mortgage rate zero days, listing metrics three, unemployment seven, building permits seventeen, house price index fifty-eight, county wages one hundred fifty, income and property tax three hundred sixty-five, insurance one thousand three hundred twenty.",
+    data:D.lag.map(r=>[r[0],r[3]]), fmtV:v=>v+"d", color:"#3987e5", rowH:28}));
+  put("c-dom", lineChart({title:"US median days on market",sub:"REAL · REALTOR.COM · FEB TO JUL 2026",
+    alt:"Line chart of US median days on market falling from 70 in February to 52 in April and May, then rising to 57 in July.",
+    series:[{name:"Median DOM",data:D.hist.dom,color:"#3987e5"}], fmtLabel:v=>v+"d", h:200}));
+  put("c-inv", lineChart({title:"Active listings and new listings",sub:"REAL · REALTOR.COM VIA FRED · MAR TO JUL 2026 · SEPARATE SCALES SHOWN AS INDEX TO MARCH = 100",
+    alt:"Line chart comparing active listings rising steadily and new listings peaking in April then declining, both indexed to March 2026 equals 100.",
+    series:[
+      {name:"Active listings",data:D.hist.active.map(d=>[d[0],+(d[1]/947866*100).toFixed(1)]),color:"#3987e5"},
+      {name:"New listings",data:D.hist.newList.map(d=>[d[0],+(d[1]/438938*100).toFixed(1)]),color:"#d95926"}
+    ], fmtLabel:v=>v.toFixed(1), h:210}));
+  put("c-region", barChart({title:"Active inventory, year over year, by region",sub:"REAL · REALTOR.COM · JULY 2026",
+    alt:"Bar chart of regional inventory change year over year: Midwest up 9.3 percent, Northeast up 8.3 percent, South down 0.2 percent.",
+    data:D.rdc.regionInv, fmtV:v=>(v>0?"+":"")+v+"%", rowH:30}));
+  put("c-rate", lineChart({title:"30-year fixed mortgage rate",sub:"REAL · FREDDIE MAC PMMS · FIVE CONSECUTIVE WEEKLY INCREASES",
+    alt:"Line chart of the 30-year fixed mortgage rate rising each week from 6.49 percent on July 9 to 6.69 percent on August 6, 2026.",
+    series:[{name:"30-yr fixed",data:D.pmms.weeks,color:"#3987e5"}], fmtLabel:v=>v.toFixed(2)+"%", dec:2, h:200}));
+  put("c-conf", barChart({title:"Confidence components for an example market",sub:"ILLUSTRATIVE SCORES · REAL COMPONENT WEIGHTS",
+    alt:"Bar chart of seven confidence components: coverage 79, freshness 74, agreement 71, history 100, sample 81, precision 100, stability 62.",
+    data:[["Coverage · .25",79],["Freshness · .20",74],["Sample · .15",81],["Agreement · .15",71],["History · .10",100],["Precision · .10",100],["Stability · .05",62]],
+    fmtV:v=>v, color:"#3987e5", rowH:26, pl:150}));
+}
+
+function show(i){
+  cur=Math.max(0,Math.min(flat.length-1,i));
+  document.querySelectorAll(".lesson").forEach((s,j)=>s.hidden=(j!==cur));
+  document.querySelectorAll("nav.side button").forEach((b,j)=>{
+    if(j===cur)b.setAttribute("aria-current","step"); else b.removeAttribute("aria-current");
+  });
+  document.getElementById("prev").disabled=(cur===0);
+  const nb=document.getElementById("next");
+  nb.disabled=(cur===flat.length-1);
+  nb.textContent=(cur===flat.length-1)?"Course complete":"Next →";
+  document.getElementById("prog-text").textContent=`Lesson ${cur+1} of ${flat.length}`;
+  document.getElementById("pbar-fill").style.width=((cur+1)/flat.length*100)+"%";
+  document.getElementById("main").focus();
+  document.getElementById("announce").textContent=`Lesson ${cur+1}: ${flat[cur].t}`;
+  window.scrollTo(0,0);
+  charts();
+  sendH();
+}
+function updateScore(){
+  document.getElementById("score-text").textContent=`${correct} / ${attempted} correct`;
+}
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button"); if(!t)return;
+  if(t.dataset.i!==undefined){show(+t.dataset.i);return;}
+  if(t.dataset.q!==undefined){
+    const qi=+t.dataset.q, oi=+t.dataset.o;
+    if(answered[qi])return;
+    answered[qi]=true; attempted++;
+    const l=flat[qi], ok=(oi===l.q.a);
+    if(ok)correct++;
+    const box=t.closest(".opts");
+    box.querySelectorAll("button").forEach((b,j)=>{
+      b.disabled=true;
+      if(j===l.q.a){b.classList.add("correct");b.querySelector(".flag").textContent="✓";}
+      else if(j===oi){b.classList.add("wrong");b.querySelector(".flag").textContent="✗";}
+    });
+    const fb=document.getElementById("fb"+qi);
+    fb.className="fb show "+(ok?"ok":"no");
+    fb.innerHTML=`<span class="verdict">${ok?"Correct":"Not quite"}</span>${l.q.fb}`;
+    document.getElementById("tocb"+qi).classList.add("done");
+    updateScore(); sendH();
+  }
+});
+document.getElementById("prev").addEventListener("click",()=>show(cur-1));
+document.getElementById("next").addEventListener("click",()=>show(cur+1));
+
+function sendH(){try{const h=document.documentElement.scrollHeight;window.parent.postMessage({id:"patterniq-tutorial",height:h,frameHeight:h},"*");}catch(e){}}
+window.addEventListener("load",sendH); window.addEventListener("resize",sendH);
+if(window.ResizeObserver)new ResizeObserver(sendH).observe(document.body);
+updateScore(); show(0);
+</script>
+</body>
+</html>

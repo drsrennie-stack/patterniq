@@ -34,6 +34,10 @@ The governing constraint applied throughout:
 | `docs/10-implementation-plan.md` | 10 | Seventeen milestones with acceptance tests and four hard gates |
 | `docs/compliance-notes.md` | n/a | WCAG 2.2 accessibility record for the wireframe deliverable |
 | `docs/open-questions.md` | n/a | Decisions that need you before Step 11 starts |
+| `tutorial/patterniq-tutorial.html` | n/a | **Interactive course, 23 lessons, built on real published data** |
+| `tutorial/tutorial-companion.md` | n/a | Printable reference version of the course |
+| `docs/11-sample-data-provenance.md` | n/a | Every real figure, its publisher, release date and cross-check |
+| `data/real-data-2026-08.json` | n/a | The verified sample dataset, machine readable |
 
 Read `docs/open-questions.md` last. Nothing in it blocks review, but four items block the build.
 
@@ -62,6 +66,8 @@ Milestone ordering in Step 10 puts the Confidence Score in production one milest
 | The point-in-time core actually works | `sql/verify-bitemporal.sql` loads a first release and a revision of the same period, then queries both ways | `metric_current` returns the revision. `metric_as_of('2024-06-15')` returns the pre-revision value. `metric_as_of` before first retrieval returns zero rows. A duplicate vintage is rejected by unique constraint. |
 | The wireframes meet WCAG 2.2 AA | axe-core via Playwright against Chromium, all ten screens scanned individually in both themes, twenty scans, with `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22aa` | 0 violations. Four contrast failures were found during the audit and fixed rather than documented as limitations. Full record in `docs/compliance-notes.md`. |
 | Data source facts | Every source in Step 2 verified against the live publisher in August 2026. Anything not confirmable from the publisher's own page is marked unverified rather than assumed. | Three sources carry unresolved licensing. They are named, and the resolution path is a milestone. |
+| The tutorial's sample data is real | Every figure retrieved from its publisher on 11 August 2026 and cross-checked against a second independent source where one existed | Confirmed. Three Realtor.com values match their FRED mirrors exactly; PMMS matches FRED. One inconsistency found (the FRED days-on-market page lagged its siblings) and recorded rather than smoothed. Full record in `docs/11-sample-data-provenance.md`. |
+| The tutorial meets WCAG 2.2 AA | axe-core via Playwright, all 23 lessons scanned individually | 0 violations. Chart palette additionally validated for colorblind separation, lightness band, chroma floor and contrast against the dark surface. |
 
 The audit script is included as `a11y-check.mjs` and can be re-run against any revision.
 
