@@ -6,7 +6,7 @@
 <title>PatternIQ, How To Read It</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#0A0E14; --panel:#111820; --panel-2:#18212C; --head:#1B2530;
@@ -14,12 +14,15 @@
   --text:#D6E1EC; --dim:#9BAFC4; --faint:#7C90A4;
   --up:#3DD68C; --down:#FF8080; --gold:#E0A93C;
   --s1:#3987e5; --s2:#d95926; --s3:#199e70;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --mono:"Plus Jakarta Sans",system-ui,sans-serif;
   --sans:"Plus Jakarta Sans",system-ui,sans-serif;
-  --label:"DM Sans",system-ui,sans-serif;
+  --label:"Plus Jakarta Sans",system-ui,sans-serif;
 }
 *{box-sizing:border-box}
-html,body{margin:0;padding:0}
+/* One typeface everywhere: Plus Jakarta Sans. Tabular figures keep numeric columns aligned. */
+body,button,input,select,textarea,svg text{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1,"lnum" 1}
+
+html,body{margin:0;padding:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.62;-webkit-font-smoothing:antialiased}
 .skip{position:absolute;left:-9999px;top:0;background:var(--gold);color:#0A0E14;padding:10px 16px;z-index:999;font-weight:700}
 .skip:focus{left:8px;top:8px}
@@ -248,14 +251,14 @@ function lineChart(o){
   const X=i=>pl+i*(w-pl-pr)/(n-1), Y=v=>pt+(max-v)/rng*(h-pt-pb);
   for(let g=0;g<=4;g++){const y=pt+(h-pt-pb)*g/4;
     svg.appendChild(E("line",{x1:pl,y1:y,x2:w-pr,y2:y,stroke:"#1A2431","stroke-width":1}));
-    const t=E("text",{x:pl-8,y:y+3.5,"text-anchor":"end",fill:"#7C90A4","font-size":"10","font-family":"IBM Plex Mono, monospace"});
+    const t=E("text",{x:pl-8,y:y+3.5,"text-anchor":"end",fill:"#7C90A4","font-size":"10","font-family":'"Plus Jakarta Sans",system-ui,sans-serif'});
     t.textContent=o.fmtY?o.fmtY(max-rng*g/4):(max-rng*g/4).toFixed(o.dec||0); svg.appendChild(t);}
-  o.series[0].data.forEach((d,i)=>{const t=E("text",{x:X(i),y:h-9,"text-anchor":"middle",fill:"#7C90A4","font-size":"10","font-family":"IBM Plex Mono, monospace"});t.textContent=d[0];svg.appendChild(t);});
+  o.series[0].data.forEach((d,i)=>{const t=E("text",{x:X(i),y:h-9,"text-anchor":"middle",fill:"#7C90A4","font-size":"10","font-family":'"Plus Jakarta Sans",system-ui,sans-serif'});t.textContent=d[0];svg.appendChild(t);});
   o.series.forEach(s=>{
     svg.appendChild(E("polyline",{points:s.data.map((d,i)=>X(i)+","+Y(d[1])).join(" "),fill:"none",stroke:s.color,"stroke-width":2,"stroke-linejoin":"round","stroke-linecap":"round"}));
     s.data.forEach((d,i)=>{svg.appendChild(E("circle",{cx:X(i),cy:Y(d[1]),r:4,fill:s.color,stroke:"#18212C","stroke-width":2}));});
     const last=s.data[s.data.length-1];
-    const lt=E("text",{x:X(n-1)+8,y:Y(last[1])+4,fill:s.color,"font-size":"11","font-family":"IBM Plex Mono, monospace","font-weight":"600"});
+    const lt=E("text",{x:X(n-1)+8,y:Y(last[1])+4,fill:s.color,"font-size":"11","font-family":'"Plus Jakarta Sans",system-ui,sans-serif',"font-weight":"600"});
     lt.textContent=o.fmtLabel?o.fmtLabel(last[1]):last[1]; svg.appendChild(lt);
   });
   const hot=E("g",{}); svg.appendChild(hot);
@@ -302,12 +305,12 @@ function barChart(o){
   const scale=hasNeg?(w-pl-pr)*0.62/max:(w-pl-pr)/max;
   rows.forEach((r,i)=>{
     const y=pt+i*rowH;
-    const t=E("text",{x:pl-10,y:y+rowH/2+4,"text-anchor":"end",fill:"#9BAFC4","font-size":"11.5","font-family":"IBM Plex Mono, monospace"});
+    const t=E("text",{x:pl-10,y:y+rowH/2+4,"text-anchor":"end",fill:"#9BAFC4","font-size":"11.5","font-family":'"Plus Jakarta Sans",system-ui,sans-serif'});
     t.textContent=r[0]; svg.appendChild(t);
     const v=r[1], bw=Math.abs(v)*scale;
     const col=o.color||(v<0?"#d95926":"#3987e5");
     svg.appendChild(E("rect",{x:v<0?zx-bw:zx,y:y+4,width:Math.max(bw,1.5),height:rowH-12,fill:col,rx:2}));
-    const vt=E("text",{x:(v<0?zx-bw-7:zx+bw+7),y:y+rowH/2+4,"text-anchor":v<0?"end":"start",fill:"#D6E1EC","font-size":"11.5","font-family":"IBM Plex Mono, monospace","font-weight":"600"});
+    const vt=E("text",{x:(v<0?zx-bw-7:zx+bw+7),y:y+rowH/2+4,"text-anchor":v<0?"end":"start",fill:"#D6E1EC","font-size":"11.5","font-family":'"Plus Jakarta Sans",system-ui,sans-serif',"font-weight":"600"});
     vt.textContent=o.fmtV?o.fmtV(v):v; svg.appendChild(vt);
   });
   if(hasNeg) svg.appendChild(E("line",{x1:zx,y1:pt,x2:zx,y2:h-6,stroke:"#7C90A4","stroke-width":1}));
